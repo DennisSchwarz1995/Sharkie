@@ -13,8 +13,8 @@ class StatusBar extends DrawableObject {
     this.loadImagesForMotion(this.LIFE_BAR_IMAGES);
     this.position_x = 0;
     this.position_y = 0;
-    this.height = 60;
-    this.width = 250;
+    this.height = 40;
+    this.width = 220;
     this.setPercentage(100, this.LIFE_BAR_IMAGES);
   }
 }

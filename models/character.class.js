@@ -5,7 +5,6 @@ class Character extends MovableObject {
   position_y = 200;
   world;
   assets;
-  swimming_sound = new Audio('audio/swimming.mp3');
   animationPlaying = false;
   isHitByJellyfish = false;
   isHitByPufferfish = false;

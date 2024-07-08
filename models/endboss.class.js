@@ -40,11 +40,11 @@ class Endboss extends MovableObject {
     right: 10
   }
 
-  constructor() {
+  constructor(position_x) {
     super().loadImage(this.INTRODUCE_IMAGES[0]);
     this.loadImagesForMotion(this.MOTION_IMAGES);
     this.loadImagesForMotion(this.INTRODUCE_IMAGES);
-    this.position_x = 2000;
+    this.position_x = position_x;
     this.animateEndboss();
   }
 

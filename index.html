@@ -1,53 +1,63 @@
 <!DOCTYPE html>
-<html lang="en" translate="no">
+<html lang='en' translate='no'>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <script src="models/drawable-object.class.js"></script>
-    <script src="models/movable-object.class.js"></script>
-    <script src="models/assets.class.js"></script>
-    <script src="models/character.class.js"></script>
-    <script src="models/pufferfish_orange.class.js"></script>
-    <script src="models/pufferfish_green.class.js"></script>
-    <script src="models/pufferfish_red.class.js"></script>
-    <script src="models/jellyfish_green.class.js"></script>
-    <script src="models/jellyfish_pink.class.js"></script>
-    <script src="models/jellyfish_purple.class.js"></script>
-    <script src="models/jellyfish_yellow.class.js"></script>
-    <script src="models/coin.class.js"></script>
-    <script src="models/world.class.js"></script>
-    <script src="models/light.class.js"></script>
-    <script src="models/status-bar.class.js"></script>
-    <script src="models/coin-bar.class.js"></script>
-    <script src="models/poison-bar.class.js"></script>
-    <script src="models/throwable-object.class.js"></script>
-    <script src="models/background-object.class.js"></script>
-    <script src="models/keyboard.class.js"></script>
-    <script src="models/water.class.js"></script>
-    <script src="models/level.class.js"></script>
-    <script src="models/endboss.class.js"></script>
-    <script src="models/level1.js"></script>
-    <script src="js/game.js"></script>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <link rel='stylesheet' href='style.css'>
+    <link rel='icon' href='img/1.Sharkie/1.IDLE/1.png'>
+    <script src='models/drawable-object.class.js'></script>
+    <script src='models/movable-object.class.js'></script>
+    <script src='models/assets.class.js'></script>
+    <script src='models/audios.class.js'></script>
+    <script src='models/character.class.js'></script>
+    <script src='models/pufferfish_orange.class.js'></script>
+    <script src='models/pufferfish_green.class.js'></script>
+    <script src='models/pufferfish_red.class.js'></script>
+    <script src='models/jellyfish_green.class.js'></script>
+    <script src='models/jellyfish_pink.class.js'></script>
+    <script src='models/jellyfish_purple.class.js'></script>
+    <script src='models/jellyfish_yellow.class.js'></script>
+    <script src='models/coin.class.js'></script>
+    <script src='models/poisonbottle.class.js'></script>
+    <script src='models/world.class.js'></script>
+    <script src='models/light.class.js'></script>
+    <script src='models/status-bar.class.js'></script>
+    <script src='models/coin-bar.class.js'></script>
+    <script src='models/poison-bar.class.js'></script>
+    <script src='models/throwable-object.class.js'></script>
+    <script src='models/background-object.class.js'></script>
+    <script src='models/keyboard.class.js'></script>
+    <script src='models/water.class.js'></script>
+    <script src='models/level.class.js'></script>
+    <script src='models/endboss.class.js'></script>
+    <script src='models/level1.js'></script>
+    <script src='js/game.js'></script>
     <title>Sharkie</title>
 </head>
-<body onload="init()">
-    <main id="startScreen" class="startScreen">
+<body onload='init()'>
+    <main id='startScreen' class='startScreen'>
         <h1>Sharkie the Game</h1>
-        <div class="options">
-            <button onclick="startGame()" id="startGameButton" class="startGameButton">Start</button>
-            <button class="controlsButton">Controls</button>
-            <button class="imprintButton">Imprint</button>
+        <div id='options' class='options'>
+            <button onclick='startGame()' id='startGameButton' class='startGameButton'>Start</button>
+            <button onclick='toggleControlInfo()'id='controlsButton' class='controlsButton'>Controls</button>
+            <button class='imprintButton'>Imprint</button>
         </div>
 
-        <div class="utilityButtons">
-            <button onclick="toggleSound()" id="muteButton" class="muteButton">Mute sound</button>
-            <button onclick="toggleFullscreen()" id="resizeButton" class="resizeButton">Fullscreen</button>
+        <div class='utilityButtons'>
+            <img onclick='toggleSound()' src='img/6.Botones/Full Screen/sound-icon.svg.png' id='muteButton' class='muteButton'></img>
+            <img onclick='toggleFullscreen()' src='img/6.Botones/Full Screen/fullscreen-icon.png' id='resizeButton' class='resizeButton'></img>
         </div>
     </main>
 
-    <div id="fullscreen">
-        <canvas id="canvas" width="720" height="480"></canvas>
+    <section id='controls' class='controls d-none' id='controls'>
+        <div onclick='toggleControlInfo()' class='backButtonDiv'><button class='backButton'>X</button></div>
+        <div class='instructions'><img class='arrowKeys' src='img/6.Botones/Key/arrow keys.png' alt='arrowkeys'><p>Move Sharkie</p></div>
+        <div class='instructions'><img class='dKey' src='img/6.Botones/Key/D key.png' alt='dkey'><p>Finslap</p></div>
+        <div class='instructions'><img class='spacebar' src='img/6.Botones/Key/Space Bar key.png' alt='spacebar'><p>Bubble Attack</p></div>
+   </section>
+
+    <div id='fullscreen'>
+        <canvas id='canvas' width='720' height='480'></canvas>
     </div>
     
 

@@ -1,5 +1,6 @@
 class World {
   assets;
+  audios;
   character;
   statusBar = new StatusBar();
   coinBar = new Coinbar();
@@ -11,19 +12,25 @@ class World {
   keyboard;
   camera_x = 0;
 
-  constructor(canvas, keyboard, assets) {
-    this.ctx = canvas.getContext('2d');
+  constructor(canvas, keyboard, assets, audios) {
+    this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
     this.assets = assets;
     this.character = new Character(assets);
     this.character.world = this;
+    this.audios = audios;
+    // this.playBackgroundMusic();
   }
 
   setWorld() {
     this.character.world = this;
   }
 
+  playBackgroundMusic() {
+    this.audios.backgroundMusic.play();
+    this.audios.backgroundMusic.loop = true;
+  }
 
   drawObjects() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -36,6 +43,7 @@ class World {
     this.addObjectArraysToCanvas(this.level.endboss);
     this.addObjectArraysToCanvas(this.level.light);
     this.addObjectArraysToCanvas(this.level.coins);
+    this.addObjectArraysToCanvas(this.level.poisonbottles);
     this.addObjectArraysToCanvas(this.throwableObjects);
 
     this.addToCanvas(this.character);
@@ -96,17 +104,17 @@ class World {
     this.checkCollisionWithPufferfish();
     this.checkCollisionWithJellyfish();
     this.checkCollisionWithCoin();
+    this.checkCollisionWithPoisonbottle();
   }
 
   checkCollisionWithPufferfish() {
     this.level.pufferfish.forEach((pufferfish) => {
-      if (this.character.isColliding(pufferfish) && !this.character.isImmun()) {
+      if (this.character.isColliding(pufferfish) && !this.character.isImmun() && !this.character.isDead()) {
         this.character.hit();
         this.character.isHitByPufferfish = true;
         setTimeout(() => {
           this.character.isHitByPufferfish = false;
-        }, 1000)
-        console.log('Hit by', pufferfish)
+        }, 1000);
         this.statusBar.setPercentage(
           this.character.hitpoints,
           this.statusBar.LIFE_BAR_IMAGES
@@ -117,12 +125,13 @@ class World {
 
   checkCollisionWithJellyfish() {
     this.level.jellyfish.forEach((jellyfish) => {
-      if (this.character.isColliding(jellyfish) && !this.character.isImmun()) {
+      if (this.character.isColliding(jellyfish) && !this.character.isImmun()&& !this.character.isDead()) {
         this.character.hit();
         this.character.isHitByJellyfish = true;
         setTimeout(() => {
           this.character.isHitByJellyfish = false;
-        }, 1000)
+        }, 1000);
+        this.audios.jellyfishShock.play();
         this.statusBar.setPercentage(
           this.character.hitpoints,
           this.statusBar.LIFE_BAR_IMAGES
@@ -136,6 +145,7 @@ class World {
       if (this.character.isColliding(coin) && !this.character.isDead()) {
         this.character.collectCoin();
         this.level.coins.splice(index, 1);
+        this.audios.collectCoin.play();
         this.coinBar.setPercentage(
           this.character.coins,
           this.coinBar.COIN_BAR_IMAGES
@@ -143,7 +153,20 @@ class World {
       }
     });
   }
-  
+
+  checkCollisionWithPoisonbottle() {
+    this.level.poisonbottles.forEach((bottle, index) => {
+      if (this.character.isColliding(bottle) && !this.character.isDead()) {
+        this.character.collectPoisonbottle();
+        this.level.poisonbottles.splice(index, 1);
+        this.audios.collectBottle.play();
+        this.poisonBar.setPercentage(
+          this.character.poison,
+          this.poisonBar.POISON_BAR_IMAGES
+        );
+      }
+    });
+  }
 
   checkThrowObjects() {
     if (this.keyboard.SPACE && this.character.coins > 0) {
@@ -155,6 +178,3 @@ class World {
     }
   }
 }
-
-
-

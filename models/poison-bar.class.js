@@ -11,10 +11,10 @@ class PoisonBar extends DrawableObject {
   constructor() {
     super();
     this.loadImagesForMotion(this.POISON_BAR_IMAGES);
-    this.position_x = 0;
-    this.position_y = 80;
-    this.height = 60;
-    this.width = 250;
+    this.position_x = 500;
+    this.position_y = 0;
+    this.height = 40;
+    this.width = 220;
     this.setPercentage(0, this.POISON_BAR_IMAGES);
   }
 }

@@ -2,16 +2,17 @@ let canvas;
 let world;
 let keyboard = new Keyboard();
 let assets = new Assets();
+let audios;
 let mute = true;
 let fullscreen = false;
 let gameStarted = false;
 let intervalIds = [];
-
-
+let isControlInfoOpen = false;
 
 function init() {
   canvas = document.getElementById("canvas");
-  world = new World(canvas, keyboard, assets);
+  audios = new Audios();
+  world = new World(canvas, keyboard, assets, audios);
 }
 
 function startGame() {
@@ -21,10 +22,6 @@ function startGame() {
   world.setWorld();
   world.checkGameState();
   hideStartScreen();
-}
-
-function hideStartScreen() {
-  document.getElementById("startScreen").classList.add("d-none");
 }
 
 window.addEventListener("keydown", (event) => {
@@ -63,6 +60,10 @@ window.addEventListener("keydown", (event) => {
   if (event.keyCode == 65) {
     keyboard.LEFT = true;
   }
+
+  if (event.keyCode == 27 && fullscreen) {
+    toggleFullscreen();
+}
 });
 
 window.addEventListener("keyup", (event) => {
@@ -101,26 +102,21 @@ window.addEventListener("keyup", (event) => {
   if (event.keyCode == 65) {
     keyboard.LEFT = false;
   }
+
 });
+
+function hideStartScreen() {
+  document.getElementById("startScreen").classList.add("d-none");
+}
 
 function toggleSound() {
   let muteButton = document.getElementById("muteButton");
   if (mute) {
-    muteButton.textContent = "Enable Sound";
+    
   } else {
-    muteButton.textContent = "Mute Sound";
+    
   }
   mute = !mute;
-}
-
-function toggleFullscreen() {
-  let resizeButton = document.getElementById("resizeButton");
-  if (fullscreen) {
-    resizeButton.textContent = "Minimize";
-  } else {
-    resizeButton.textContent = "Fullscreen";
-  }
-  fullscreen = !fullscreen;
 }
 
 function setStoppableInterval(fn, time) {
@@ -129,18 +125,34 @@ function setStoppableInterval(fn, time) {
   return id;
 }
 
-function stopGame() {
-  console.log(intervalIds)
-  intervalIds.forEach(id => clearInterval(id));
-  
-}
+// function stopGame() {
+//   console.log(intervalIds)
+//   intervalIds.forEach(id => clearInterval(id));
 
+// }
 
 function toggleFullscreen() {
-  let canvas = document.getElementById('canvas');
-  if(canvas.classList.contains('fullscreen')) {
-    canvas.classList.remove('fullscreen') 
+  let canvas = document.getElementById("canvas");
+  let icon = document.getElementById('resizeButton');
+  if (canvas.classList.contains("fullscreen")) {
+    canvas.classList.remove("fullscreen");
+    fullscreen = false;
+    icon.src = 'img/6.Botones/Full Screen/fullscreen-icon.png'
   } else {
-    canvas.classList.add('fullscreen')
+    canvas.classList.add("fullscreen");
+    fullscreen = true;
+    icon.src = 'img/6.Botones/Full Screen/fullscreen-exit-icon.png'
+  }
+}
+
+function toggleControlInfo() {
+  if (isControlInfoOpen) {
+    document.getElementById("controls").classList.add("d-none");
+    document.getElementById("startScreen").classList.remove("d-none");
+    isControlInfoOpen = false;
+  } else {
+    document.getElementById("controls").classList.remove("d-none");
+    document.getElementById("startScreen").classList.add("d-none");
+    isControlInfoOpen = true;
   }
 }

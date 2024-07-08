@@ -7,6 +7,7 @@ class MovableObject extends DrawableObject {
   otherDirection = false;
   hitpoints = 100;
   coins = 0;
+  poison = 0;
   lastHit = 5;
   lastMoved = 0;
   timepassed = 0;
@@ -29,6 +30,13 @@ class MovableObject extends DrawableObject {
     this.coins += 20;
     if (this.coins > 100) {
       this.coins = 100;
+    }
+  }
+
+  collectPoisonbottle() {
+    this.poison += 20;
+    if (this.poison > 100) {
+      this.poison = 100;
     }
   }
 
