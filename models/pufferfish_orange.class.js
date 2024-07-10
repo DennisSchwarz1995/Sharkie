@@ -33,6 +33,12 @@ class PufferFish_Orange extends MovableObject {
     "img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/2.bubbleswim5.png",
   ];
 
+  DEAD_IMAGES = [
+    'img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/2.png',
+    'img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/2.2.png',
+    'img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/2.3.png'
+  ];
+
   constructor(position_x) {
     super().loadImage(
       'img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/2.swim1.png'

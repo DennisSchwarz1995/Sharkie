@@ -48,7 +48,7 @@ class DrawableObject {
       this instanceof JellyFish_Yellow ||
       this instanceof JellyFish_Purple ||
       this instanceof Endboss ||
-      this instanceof Coin || this instanceof PoisonBottle
+      this instanceof Coin || this instanceof PoisonBottle || this instanceof ThrowableObject
     ) {
       ctx.beginPath();
       ctx.lineWidth = '1';

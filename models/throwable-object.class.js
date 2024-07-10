@@ -1,30 +1,24 @@
 class ThrowableObject extends MovableObject {
+  constructor(position_x, position_y, otherDirection, image) {
+    super().loadImage(image);
+    this.position_x = position_x;
+    this.position_y = position_y;
+    this.otherDirection = otherDirection;
+    this.width = 40;
+    this.height = 40;
+    this.throwBubble();
+  }
 
-    constructor(position_x, position_y) {
-        super().loadImage('img/1.Sharkie/4.Attack/Bubble trap/Bubble.png');
-        this.position_x = position_x;
-        this.position_y = position_y;
-        this.width = 40;
-        this.height = 40;
-        this.horizontal_distance = 400;
-        this.hasStartedRising = false
-        this.throwBubble();
+  throwBubble() {
+    if (this.otherDirection) {
+      this.position_x -= 140;
+      setStoppableInterval(() => {
+        this.position_x -= 15;
+      }, 50);
+    } else if (!this.otherDirection) {
+      setStoppableInterval(() => {
+        this.position_x += 15;
+      }, 50);
     }
-
-    throwBubble(bubbleType) {
-        this.speed_y = 12;
-        this.speed_x = 20;
-        setInterval( () => {
-            this.position_x += this.speed_x;
-
-            if (this.position_x >= this.horizontal_distance && !this.hasStartedRising) {
-                this.hasStartedRising = true;
-            }
-            if (this.hasStartedRising) {
-                this.position_y -= this.speed_y;
-                this.speed_y *= 0.98; 
-            }
-        }, 50);
-    
-    }
+  }
 }

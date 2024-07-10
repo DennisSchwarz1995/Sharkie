@@ -6,9 +6,19 @@ class JellyFish_Green extends MovableObject {
     'img/2.Enemy/2 Jelly fish/Súper dangerous/Green 4.png',
   ];
 
+  DEAD_IMAGES = [
+    'img/2.Enemy/2 Jelly fish/Dead/green/g1.png',
+    'img/2.Enemy/2 Jelly fish/Dead/green/g2.png',
+    'img/2.Enemy/2 Jelly fish/Dead/green/g3.png',
+    'img/2.Enemy/2 Jelly fish/Dead/green/g4.png',
+  ];
+
+  isDead = false;
+
   constructor(position_x, position_y) {
     super().loadImage('img/2.Enemy/2 Jelly fish/Súper dangerous/Green 1.png');
     this.loadImagesForMotion(this.MOTION_IMAGES);
+    this.loadImagesForMotion(this.DEAD_IMAGES);
     this.width = 90;
     this.height = 90;
     this.offset.top = 6;
@@ -21,13 +31,28 @@ class JellyFish_Green extends MovableObject {
   }
 
   animate() {
-    setInterval(() => {
-      this.playAnimation(this.MOTION_IMAGES);
+    let animation = setInterval(() => {
+      if (!this.isDead) {
+        this.playAnimation(this.MOTION_IMAGES);
+      } else {
+        clearInterval(animation);
+      }
     }, 150);
 
-    setInterval(() => {
-      this.updateHorizontalMovement();
-      this.updateVerticalMovement();
+    let movement = setInterval(() => {
+      if (!this.isDead) {
+        this.updateHorizontalMovement();
+        this.updateVerticalMovement();
+      } else {
+        clearInterval(movement);
+      }
     }, 100);
+  }
+
+  animateDeath() {
+    this.isDead = true;
+    setInterval(() => {
+      this.playAnimation(this.DEAD_IMAGES);
+    }, 150);
   }
 }

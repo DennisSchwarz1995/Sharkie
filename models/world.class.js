@@ -11,16 +11,16 @@ class World {
   ctx;
   keyboard;
   camera_x = 0;
+  isInAttackAnimation = false;
 
   constructor(canvas, keyboard, assets, audios) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
     this.assets = assets;
-    this.character = new Character(assets);
-    this.character.world = this;
+    this.character = new Character(this, assets);
     this.audios = audios;
-    // this.playBackgroundMusic();
+    this.audios.setVolume(0.05);
   }
 
   setWorld() {
@@ -96,7 +96,6 @@ class World {
   checkGameState() {
     setInterval(() => {
       this.checkCollision();
-      this.checkThrowObjects();
     }, 100);
   }
 
@@ -105,11 +104,29 @@ class World {
     this.checkCollisionWithJellyfish();
     this.checkCollisionWithCoin();
     this.checkCollisionWithPoisonbottle();
+    this.checkBubbleCollisionWithJellyfish();
   }
 
   checkCollisionWithPufferfish() {
-    this.level.pufferfish.forEach((pufferfish) => {
-      if (this.character.isColliding(pufferfish) && !this.character.isImmun() && !this.character.isDead()) {
+    this.level.pufferfish.forEach((pufferfish, index) => {
+      if (
+        this.character.isColliding(pufferfish) &&
+        this.keyboard.F &&
+        !this.isInAttackAnimation
+      ) {
+        this.isInAttackAnimation = true;
+        setTimeout(() => {
+          this.level.pufferfish.splice(index, 1);
+          this.isInAttackAnimation = false;
+        }, 500);
+      }
+
+      if (
+        this.character.isColliding(pufferfish) &&
+        !this.character.isImmun() &&
+        !this.character.isDead() &&
+        !this.isInAttackAnimation
+      ) {
         this.character.hit();
         this.character.isHitByPufferfish = true;
         setTimeout(() => {
@@ -125,7 +142,11 @@ class World {
 
   checkCollisionWithJellyfish() {
     this.level.jellyfish.forEach((jellyfish) => {
-      if (this.character.isColliding(jellyfish) && !this.character.isImmun()&& !this.character.isDead()) {
+      if (
+        this.character.isColliding(jellyfish) &&
+        !this.character.isImmun() &&
+        !this.character.isDead()
+      ) {
         this.character.hit();
         this.character.isHitByJellyfish = true;
         setTimeout(() => {
@@ -137,6 +158,20 @@ class World {
           this.statusBar.LIFE_BAR_IMAGES
         );
       }
+    });
+  }
+
+  checkBubbleCollisionWithJellyfish() {
+    this.level.jellyfish.forEach((jellyfish, jellyfishIndex) => {
+      this.throwableObjects.forEach((bubble, bubbleIndex) => {
+        if (bubble.isColliding(jellyfish)) {
+          jellyfish.animateDeath();
+          this.throwableObjects.splice(bubbleIndex, 1);
+          setTimeout(() => {
+            this.level.jellyfish.splice(jellyfishIndex, 1);
+          }, 850);
+        }
+      });
     });
   }
 
@@ -168,13 +203,30 @@ class World {
     });
   }
 
-  checkThrowObjects() {
-    if (this.keyboard.SPACE && this.character.coins > 0) {
-      let bubble = new ThrowableObject(
-        this.character.position_x + 150,
-        this.character.position_y + 120
-      );
-      this.throwableObjects.push(bubble);
-    }
+  shootBubble() {
+    let bubble = new ThrowableObject(
+      this.character.position_x + 150,
+      this.character.position_y + 120,
+      this.character.otherDirection,
+      "img/1.Sharkie/4.Attack/Bubble trap/Bubble.png"
+    );
+    this.throwableObjects.push(bubble);
+    this.audios.bubble.play();
+  }
+
+  shootPoisonBubble() {
+    let bubble = new ThrowableObject(
+      this.character.position_x + 150,
+      this.character.position_y + 120,
+      this.character.otherDirection,
+      "img/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png"
+    );
+    this.throwableObjects.push(bubble);
+    this.audios.bubble.play();
+    this.character.poison -= 20;
+    this.poisonBar.setPercentage(
+      this.character.poison,
+      this.poisonBar.POISON_BAR_IMAGES
+    );
   }
 }

@@ -6,6 +6,7 @@ class Character extends MovableObject {
   world;
   assets;
   animationPlaying = false;
+  isAttacking = false;
   isHitByJellyfish = false;
   isHitByPufferfish = false;
   deadFromJellyFish = false;
@@ -17,8 +18,9 @@ class Character extends MovableObject {
     right: 30,
   };
 
-  constructor(assets) {
-    super().loadImage('img/1.Sharkie/3.Swim/1.png');
+  constructor(world, assets) {
+    super().loadImage("img/1.Sharkie/3.Swim/1.png");
+    this.world = world;
     this.assets = assets;
     this.loadImagesForMotion(this.assets.SWIMMING_IMAGES);
     this.loadImagesForMotion(this.assets.IDLE_IMAGES);
@@ -59,8 +61,18 @@ class Character extends MovableObject {
       } else if (this.isDead() && this.isHitByJellyfish) {
         this.deadFromJellyFish = true;
         this.triggerDeathAnimation(characterAnimation);
+      } else if (this.world.keyboard.SPACE && this.poison <= 0 && !this.isDead()) {
+        this.triggerBubbleAttack();
+        this.playAnimation(this.assets.BUBBLE_ATTACK_IMAGES);
+      } else if (this.world.keyboard.SPACE && this.poison > 0 && !this.isDead()) {
+        this.triggerPoisonBubbleAttack();
+        this.playAnimation(this.assets.POISON_BUBBLE_ATTACK_IMAGES);
+      } else if (this.world.keyboard.F && !this.isDead()) {
+        this.triggerFinslapAttack();
+        this.playAnimation(this.assets.FINSLAP_ATTACK_IMAGES);
       } else if (this.isMoving() && !this.isHurt()) {
         this.playAnimation(this.assets.SWIMMING_IMAGES);
+        this.world.audios.characterSwim.play();
       } else if (
         this.isHurt() &&
         this.isHitByPufferfish &&
@@ -79,12 +91,66 @@ class Character extends MovableObject {
     }, 100);
   }
 
+  triggerBubbleAttack() {
+    if (!this.isAttacking) {
+      this.currentMotionImage = 0;
+      let attackAnimation = setStoppableInterval(() => {
+        this.isAttacking = true;
+        this.world.keyboard.SPACE = true;
+      }, 50);
+
+      setTimeout(() => {
+        clearInterval(attackAnimation);
+        this.isAttacking = false;
+        this.world.keyboard.SPACE = false;
+        this.world.shootBubble();
+      }, 800);
+    }
+  }
+
+  triggerPoisonBubbleAttack() {
+    if (!this.isAttacking) {
+      this.currentMotionImage = 0;
+      let attackAnimation = setStoppableInterval(() => {
+        this.isAttacking = true;
+        this.world.keyboard.SPACE = true;
+      }, 50);
+
+      setTimeout(() => {
+        clearInterval(attackAnimation);
+        this.isAttacking = false;
+        this.world.keyboard.SPACE = false;
+        this.world.shootPoisonBubble();
+      }, 800);
+    }
+  }
+
+  triggerFinslapAttack() {
+    if (!this.isAttacking) {
+      this.currentMotionImage = 0;
+      
+      let attackAnimation = setStoppableInterval(() => {
+        this.isAttacking = true;
+        this.world.keyboard.F = true;
+      }, 150);
+
+      setTimeout(() => {
+        clearInterval(attackAnimation);
+        this.isAttacking = false;
+        this.world.keyboard.F = false;
+        this.world.audios.finslap.play();
+      }, 800);
+    }
+  }
+
   isButtonPressed() {
     return (
       this.world.keyboard.RIGHT &&
       this.world.keyboard.LEFT &&
       this.world.keyboard.UP &&
-      this.world.keyboard.DOWN
+      this.world.keyboard.DOWN && 
+      this.world.keyboard.SPACE && 
+      this.world.keyboard.F
     );
   }
 

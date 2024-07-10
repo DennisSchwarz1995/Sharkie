@@ -21,7 +21,55 @@ function startGame() {
   world.drawObjects();
   world.setWorld();
   world.checkGameState();
+  // world.playBackgroundMusic();
   hideStartScreen();
+}
+
+function hideStartScreen() {
+  document.getElementById("startScreen").classList.add("d-none");
+}
+
+function setStoppableInterval(fn, time) {
+  let id = setInterval(fn, time);
+  intervalIds.push(id);
+  return id;
+}
+
+function toggleSoundSlider() {
+  let slider = document.getElementById("volumeSlider");
+  slider.classList.toggle("d-none");
+}
+
+function setAudioVolume(value) {
+  let volume = value / 100;
+  audios.setVolume(volume); 
+  document.getElementById('sliderValue').innerText = value;
+}
+
+function toggleFullscreen() {
+  let canvas = document.getElementById("canvas");
+  let icon = document.getElementById("resizeButton");
+  if (canvas.classList.contains("fullscreen")) {
+    canvas.classList.remove("fullscreen");
+    fullscreen = false;
+    icon.src = "img/6.Botones/Full Screen/fullscreen-icon.png";
+  } else {
+    canvas.classList.add("fullscreen");
+    fullscreen = true;
+    icon.src = "img/6.Botones/Full Screen/fullscreen-exit-icon.png";
+  }
+}
+
+function toggleControlInfo() {
+  if (isControlInfoOpen) {
+    document.getElementById("controls").classList.add("d-none");
+    document.getElementById("startScreen").classList.remove("d-none");
+    isControlInfoOpen = false;
+  } else {
+    document.getElementById("controls").classList.remove("d-none");
+    document.getElementById("startScreen").classList.add("d-none");
+    isControlInfoOpen = true;
+  }
 }
 
 window.addEventListener("keydown", (event) => {
@@ -61,9 +109,13 @@ window.addEventListener("keydown", (event) => {
     keyboard.LEFT = true;
   }
 
+  if (event.keyCode == 70) {
+    keyboard.F = true;
+  }
+
   if (event.keyCode == 27 && fullscreen) {
     toggleFullscreen();
-}
+  }
 });
 
 window.addEventListener("keyup", (event) => {
@@ -103,56 +155,13 @@ window.addEventListener("keyup", (event) => {
     keyboard.LEFT = false;
   }
 
-});
-
-function hideStartScreen() {
-  document.getElementById("startScreen").classList.add("d-none");
-}
-
-function toggleSound() {
-  let muteButton = document.getElementById("muteButton");
-  if (mute) {
-    
-  } else {
-    
+  if (event.keyCode == 70) {
+    keyboard.F = false;
   }
-  mute = !mute;
-}
-
-function setStoppableInterval(fn, time) {
-  let id = setInterval(fn, time);
-  intervalIds.push(id);
-  return id;
-}
+});
 
 // function stopGame() {
 //   console.log(intervalIds)
 //   intervalIds.forEach(id => clearInterval(id));
 
 // }
-
-function toggleFullscreen() {
-  let canvas = document.getElementById("canvas");
-  let icon = document.getElementById('resizeButton');
-  if (canvas.classList.contains("fullscreen")) {
-    canvas.classList.remove("fullscreen");
-    fullscreen = false;
-    icon.src = 'img/6.Botones/Full Screen/fullscreen-icon.png'
-  } else {
-    canvas.classList.add("fullscreen");
-    fullscreen = true;
-    icon.src = 'img/6.Botones/Full Screen/fullscreen-exit-icon.png'
-  }
-}
-
-function toggleControlInfo() {
-  if (isControlInfoOpen) {
-    document.getElementById("controls").classList.add("d-none");
-    document.getElementById("startScreen").classList.remove("d-none");
-    isControlInfoOpen = false;
-  } else {
-    document.getElementById("controls").classList.remove("d-none");
-    document.getElementById("startScreen").classList.add("d-none");
-    isControlInfoOpen = true;
-  }
-}
