@@ -14,7 +14,7 @@ class World {
   isInAttackAnimation = false;
 
   constructor(canvas, keyboard, assets, audios) {
-    this.ctx = canvas.getContext("2d");
+    this.ctx = canvas.getContext('2d');
     this.canvas = canvas;
     this.keyboard = keyboard;
     this.assets = assets;
@@ -115,10 +115,13 @@ class World {
         !this.isInAttackAnimation
       ) {
         this.isInAttackAnimation = true;
+        pufferfish.animatePufferFishDeath();
         setTimeout(() => {
-          this.level.pufferfish.splice(index, 1);
+          if(this.level.pufferfish.position_y < 300) {
+            this.level.pufferfish.splice(index, 1);
+          }
           this.isInAttackAnimation = false;
-        }, 500);
+        }, 800);
       }
 
       if (
@@ -165,7 +168,7 @@ class World {
     this.level.jellyfish.forEach((jellyfish, jellyfishIndex) => {
       this.throwableObjects.forEach((bubble, bubbleIndex) => {
         if (bubble.isColliding(jellyfish)) {
-          jellyfish.animateDeath();
+          jellyfish.animateJellyFishDeath();
           this.throwableObjects.splice(bubbleIndex, 1);
           setTimeout(() => {
             this.level.jellyfish.splice(jellyfishIndex, 1);
@@ -208,7 +211,7 @@ class World {
       this.character.position_x + 150,
       this.character.position_y + 120,
       this.character.otherDirection,
-      "img/1.Sharkie/4.Attack/Bubble trap/Bubble.png"
+      'img/1.Sharkie/4.Attack/Bubble trap/Bubble.png'
     );
     this.throwableObjects.push(bubble);
     this.audios.bubble.play();
@@ -219,7 +222,7 @@ class World {
       this.character.position_x + 150,
       this.character.position_y + 120,
       this.character.otherDirection,
-      "img/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png"
+      'img/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png'
     );
     this.throwableObjects.push(bubble);
     this.audios.bubble.play();

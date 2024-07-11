@@ -1,4 +1,4 @@
-class JellyFish_Green extends MovableObject {
+class JellyFish_Green extends AnimationObject {
   MOTION_IMAGES = [
     'img/2.Enemy/2 Jelly fish/Súper dangerous/Green 1.png',
     'img/2.Enemy/2 Jelly fish/Súper dangerous/Green 2.png',
@@ -13,8 +13,6 @@ class JellyFish_Green extends MovableObject {
     'img/2.Enemy/2 Jelly fish/Dead/green/g4.png',
   ];
 
-  isDead = false;
-
   constructor(position_x, position_y) {
     super().loadImage('img/2.Enemy/2 Jelly fish/Súper dangerous/Green 1.png');
     this.loadImagesForMotion(this.MOTION_IMAGES);
@@ -27,32 +25,6 @@ class JellyFish_Green extends MovableObject {
     this.position_y = position_y;
     this.direction_x = 'left';
     this.direction_y = 'up';
-    this.animate();
-  }
-
-  animate() {
-    let animation = setInterval(() => {
-      if (!this.isDead) {
-        this.playAnimation(this.MOTION_IMAGES);
-      } else {
-        clearInterval(animation);
-      }
-    }, 150);
-
-    let movement = setInterval(() => {
-      if (!this.isDead) {
-        this.updateHorizontalMovement();
-        this.updateVerticalMovement();
-      } else {
-        clearInterval(movement);
-      }
-    }, 100);
-  }
-
-  animateDeath() {
-    this.isDead = true;
-    setInterval(() => {
-      this.playAnimation(this.DEAD_IMAGES);
-    }, 150);
+    this.animateJellyFish();
   }
 }

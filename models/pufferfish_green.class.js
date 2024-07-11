@@ -1,4 +1,4 @@
-class PufferFish_Green extends MovableObject {
+class PufferFish_Green extends AnimationObject {
   height = 70;
   width = 75;
   offset = {
@@ -7,8 +7,9 @@ class PufferFish_Green extends MovableObject {
     left: 0,
     right: 5,
   };
-  movingLeft = false;
-  isTransitioning = false;
+  directionInterval = 2500;
+  transitionInterval = 3500;
+
   MOTION_IMAGES = [
     "img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim1.png",
     "img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim2.png",
@@ -33,6 +34,12 @@ class PufferFish_Green extends MovableObject {
     "img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/1.bubbleswim5.png",
   ];
 
+  DEAD_IMAGES = [
+    'img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/1.Dead 1 (can animate by going up).png',
+    'img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/1.Dead 1 (can animate by going up).png',
+    'img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/1.Dead 1 (can animate by going up).png'
+  ];
+
   constructor(position_x) {
     super().loadImage(
       "img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim1.png"
@@ -43,70 +50,7 @@ class PufferFish_Green extends MovableObject {
     this.loadImagesForMotion(this.MOTION_IMAGES);
     this.loadImagesForMotion(this.TRANSITION_IMAGES);
     this.loadImagesForMotion(this.PUFF_UP_IMAGES);
-    this.animate();
-  }
-
-  animate() {
-    setStoppableInterval(() => {
-      if (this.movingLeft) {
-        this.swimLeft();
-        this.otherDirection = false;
-      } else {
-        this.swimRight();
-        this.otherDirection = true;
-      }
-    }, 1000 / 60);
-
-    setStoppableInterval(() => {
-      if (!this.isTransitioning && !this.isPuffedUp) {
-        this.offset.bottom = 18;
-        this.playAnimation(this.MOTION_IMAGES);
-      }
-    }, 150);
-
-    setStoppableInterval(() => {
-      this.movingLeft = !this.movingLeft;
-    }, 2500);
-
-    setTimeout(() => {
-      this.isTransitioning = true;
-      this.animateTransition();
-    }, 3500);
-  }
-
-  animateTransition() {
-    this.currentMotionImage = 0;
-    if (this.isTransitioning) {
-      let transitionAnimation = setStoppableInterval(() => {
-        this.offset.bottom = 3;
-        this.playAnimation(this.TRANSITION_IMAGES);
-       
-      }, 150);
-
-      setTimeout(() => {
-        this.isTransitioning = false;
-        clearInterval(transitionAnimation);
-        this.isPuffedUp = true;
-        this.animatePuffUp();
-      }, 1000);
-    }
-  }
-
-  animatePuffUp() {
-    if (this.isPuffedUp) {
-      let puffUpAnimation = setStoppableInterval(() => {
-        this.playAnimation(this.PUFF_UP_IMAGES);
-      }, 150);
-
-      setTimeout(() => {
-        this.isPuffedUp = false;
-        clearInterval(puffUpAnimation);
-      }, 3000);
-
-      setTimeout(() => {
-        this.isTransitioning = true;
-        this.animateTransition();
-      }, 5000);
-    }
+    this.loadImagesForMotion(this.DEAD_IMAGES);
+    this.animatePufferFish(this.directionInterval, this.transitionInterval)
   }
 }

@@ -7,6 +7,7 @@
     <link rel='icon' href='img/1.Sharkie/1.IDLE/1.png'>
     <script src='models/drawable-object.class.js'></script>
     <script src='models/movable-object.class.js'></script>
+    <script src='models/animation-object.class.js'></script>
     <script src='models/assets.class.js'></script>
     <script src='models/audios.class.js'></script>
     <script src='models/character.class.js'></script>
@@ -40,13 +41,13 @@
         <div id='options' class='options'>
             <button onclick='startGame()' id='startGameButton' class='startGameButton'>Start</button>
             <button onclick='toggleControlInfo()'id='controlsButton' class='controlsButton'>Controls</button>
-            <a href="imprint.html" target='_blank' class='imprintButton'>Imprint</a>
+            <a href='imprint.html' target='_blank' class='imprintButton'>Imprint</a>
         </div>
 
         <div class='utilityButtons'>
             <div id='volumeSlider' class='volumeSlider d-none'>
                 <input type='range' min='0' max='100' value='5' id='slider' class='slider' oninput='setAudioVolume(this.value)' onchange='setAudioVolume(this.value)'>
-                <p id="sliderValue" class="sliderValue">5</p>
+                <p id='sliderValue' class='sliderValue'>5</p>
             </div>
             <img onclick='toggleSoundSlider()' src='img/6.Botones/Full Screen/sound-icon.svg.png' id='muteButton' class='muteButton'></img>
             <img onclick='toggleFullscreen()' src='img/6.Botones/Full Screen/fullscreen-icon.png' id='resizeButton' class='resizeButton'></img>

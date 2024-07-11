@@ -1,4 +1,4 @@
-class Character extends MovableObject {
+class Character extends AnimationObject {
   height = 200;
   width = 200;
   speed_x = 6;
@@ -61,14 +61,22 @@ class Character extends MovableObject {
       } else if (this.isDead() && this.isHitByJellyfish) {
         this.deadFromJellyFish = true;
         this.triggerDeathAnimation(characterAnimation);
-      } else if (this.world.keyboard.SPACE && this.poison <= 0 && !this.isDead()) {
-        this.triggerBubbleAttack();
+      } else if (
+        this.world.keyboard.SPACE &&
+        this.poison <= 0 &&
+        !this.isDead()
+      ) {
+        this.animateCharacterAttack("bubble");
         this.playAnimation(this.assets.BUBBLE_ATTACK_IMAGES);
-      } else if (this.world.keyboard.SPACE && this.poison > 0 && !this.isDead()) {
-        this.triggerPoisonBubbleAttack();
+      } else if (
+        this.world.keyboard.SPACE &&
+        this.poison > 0 &&
+        !this.isDead()
+      ) {
+        this.animateCharacterAttack("poisonBubble");
         this.playAnimation(this.assets.POISON_BUBBLE_ATTACK_IMAGES);
       } else if (this.world.keyboard.F && !this.isDead()) {
-        this.triggerFinslapAttack();
+        this.animateCharacterAttack("finslap");
         this.playAnimation(this.assets.FINSLAP_ATTACK_IMAGES);
       } else if (this.isMoving() && !this.isHurt()) {
         this.playAnimation(this.assets.SWIMMING_IMAGES);
@@ -91,65 +99,13 @@ class Character extends MovableObject {
     }, 100);
   }
 
-  triggerBubbleAttack() {
-    if (!this.isAttacking) {
-      this.currentMotionImage = 0;
-      let attackAnimation = setStoppableInterval(() => {
-        this.isAttacking = true;
-        this.world.keyboard.SPACE = true;
-      }, 50);
-
-      setTimeout(() => {
-        clearInterval(attackAnimation);
-        this.isAttacking = false;
-        this.world.keyboard.SPACE = false;
-        this.world.shootBubble();
-      }, 800);
-    }
-  }
-
-  triggerPoisonBubbleAttack() {
-    if (!this.isAttacking) {
-      this.currentMotionImage = 0;
-      let attackAnimation = setStoppableInterval(() => {
-        this.isAttacking = true;
-        this.world.keyboard.SPACE = true;
-      }, 50);
-
-      setTimeout(() => {
-        clearInterval(attackAnimation);
-        this.isAttacking = false;
-        this.world.keyboard.SPACE = false;
-        this.world.shootPoisonBubble();
-      }, 800);
-    }
-  }
-
-  triggerFinslapAttack() {
-    if (!this.isAttacking) {
-      this.currentMotionImage = 0;
-      
-      let attackAnimation = setStoppableInterval(() => {
-        this.isAttacking = true;
-        this.world.keyboard.F = true;
-      }, 150);
-
-      setTimeout(() => {
-        clearInterval(attackAnimation);
-        this.isAttacking = false;
-        this.world.keyboard.F = false;
-        this.world.audios.finslap.play();
-      }, 800);
-    }
-  }
-
   isButtonPressed() {
     return (
       this.world.keyboard.RIGHT &&
       this.world.keyboard.LEFT &&
       this.world.keyboard.UP &&
-      this.world.keyboard.DOWN && 
-      this.world.keyboard.SPACE && 
+      this.world.keyboard.DOWN &&
+      this.world.keyboard.SPACE &&
       this.world.keyboard.F
     );
   }

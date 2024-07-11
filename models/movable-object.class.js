@@ -13,6 +13,7 @@ class MovableObject extends DrawableObject {
   timepassed = 0;
   immunityDuration = 1.5;
 
+
   isColliding(obj) {
     return (
       this.position_x + this.width - this.offset.right >
@@ -131,4 +132,5 @@ class MovableObject extends DrawableObject {
       }
     }
   }
+
 }
