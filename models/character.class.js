@@ -32,71 +32,39 @@ class Character extends AnimationObject {
     this.loadImagesForMotion(this.assets.BUBBLE_ATTACK_IMAGES);
     this.loadImagesForMotion(this.assets.POISON_BUBBLE_ATTACK_IMAGES);
     this.loadImagesForMotion(this.assets.FINSLAP_ATTACK_IMAGES);
-    this.animate();
+    this.animateCharacter();
   }
 
-  animate() {
-    setStoppableInterval(() => {
-      if (this.isAbleToSwimRight()) {
-        this.swimRight();
-        this.otherDirection = false;
-      }
-      if (this.isAbleToSwimLeft()) {
-        this.swimLeft();
-        this.otherDirection = true;
-      }
-      if (this.isAbleToSwimUp()) {
-        this.swimUp();
-      }
-      if (this.isAbleToSwimDown()) {
-        this.swimDown();
-      }
-      this.updateCameraPosition();
-    }, 1000 / 60);
+  handleDeathAnimation(characterAnimation) {
+    if (this.isHitByPufferfish) {
+      this.deadFromPufferfish = true;
+    } else if (this.isHitByJellyfish) {
+      this.deadFromJellyFish = true;
+    }
+    this.triggerDeathAnimation(characterAnimation);
+  }
 
-    let characterAnimation = setStoppableInterval(() => {
-      if (this.isDead() && this.isHitByPufferfish) {
-        this.deadFromPufferfish = true;
-        this.triggerDeathAnimation(characterAnimation);
-      } else if (this.isDead() && this.isHitByJellyfish) {
-        this.deadFromJellyFish = true;
-        this.triggerDeathAnimation(characterAnimation);
-      } else if (
-        this.world.keyboard.SPACE &&
-        this.poison <= 0 &&
-        !this.isDead()
-      ) {
-        this.animateCharacterAttack("bubble");
-        this.playAnimation(this.assets.BUBBLE_ATTACK_IMAGES);
-      } else if (
-        this.world.keyboard.SPACE &&
-        this.poison > 0 &&
-        !this.isDead()
-      ) {
-        this.animateCharacterAttack("poisonBubble");
-        this.playAnimation(this.assets.POISON_BUBBLE_ATTACK_IMAGES);
-      } else if (this.world.keyboard.F && !this.isDead()) {
-        this.animateCharacterAttack("finslap");
-        this.playAnimation(this.assets.FINSLAP_ATTACK_IMAGES);
-      } else if (this.isMoving() && !this.isHurt()) {
-        this.playAnimation(this.assets.SWIMMING_IMAGES);
-        this.world.audios.characterSwim.play();
-      } else if (
-        this.isHurt() &&
-        this.isHitByPufferfish &&
-        !this.isHitByJellyfish
-      ) {
-        this.playAnimation(this.assets.HURT_POISONED_IMAGES);
-      } else if (
-        this.isHurt() &&
-        this.isHitByJellyfish &&
-        !this.isHitByPufferfish
-      ) {
-        this.playAnimation(this.assets.HURT_SHOCKED_IMAGES);
-      } else if (!this.isButtonPressed() && !this.isDead()) {
-        this.playAnimation(this.assets.IDLE_IMAGES);
-      }
-    }, 100);
+  handleBubbleAttack() {
+    if (this.poison <= 0) {
+      this.animateCharacterAttack("bubble");
+      this.playAnimation(this.assets.BUBBLE_ATTACK_IMAGES);
+    } else {
+      this.animateCharacterAttack("poisonBubble");
+      this.playAnimation(this.assets.POISON_BUBBLE_ATTACK_IMAGES);
+    }
+  }
+
+  handleFinslapAttack() {
+    this.animateCharacterAttack("finslap");
+    this.playAnimation(this.assets.FINSLAP_ATTACK_IMAGES);
+  }
+
+  handleHurtAnimation() {
+    if (this.isHitByPufferfish && !this.isHitByJellyfish) {
+      this.playAnimation(this.assets.HURT_POISONED_IMAGES);
+    } else if (this.isHitByJellyfish && !this.isHitByPufferfish) {
+      this.playAnimation(this.assets.HURT_SHOCKED_IMAGES);
+    }
   }
 
   isButtonPressed() {
@@ -108,49 +76,6 @@ class Character extends AnimationObject {
       this.world.keyboard.SPACE &&
       this.world.keyboard.F
     );
-  }
-
-  triggerDeathAnimation(characterAnimation) {
-    if (!this.animationPlaying) {
-      this.animationPlaying = true;
-      if (this.deadFromPufferfish) {
-        this.playDeathAnimationByPoison(characterAnimation);
-      } else if (this.deadFromJellyFish) {
-        this.playDeathAnimationByShock(characterAnimation);
-      }
-    }
-  }
-
-  playDeathAnimationByPoison(characterAnimation) {
-    this.currentMotionImage = 0;
-    let deathAnimation = setStoppableInterval(() => {
-      this.playAnimation(this.assets.POISONED_DEAD_IMAGES);
-    }, 200);
-
-    setTimeout(() => {
-      this.riseToSurface();
-    }, 600);
-
-    setTimeout(() => {
-      clearInterval(characterAnimation);
-      clearInterval(deathAnimation);
-    }, 2000);
-  }
-
-  playDeathAnimationByShock(characterAnimation) {
-    this.currentMotionImage = 0;
-    let deathAnimation = setStoppableInterval(() => {
-      this.playAnimation(this.assets.SHOCKED_DEAD_IMAGES);
-    }, 200);
-
-    setTimeout(() => {
-      this.sinkToGround();
-    }, 600);
-
-    setTimeout(() => {
-      clearInterval(characterAnimation);
-      clearInterval(deathAnimation);
-    }, 2000);
   }
 
   riseToSurface() {
@@ -202,5 +127,13 @@ class Character extends AnimationObject {
 
   isAboveGround() {
     return this.position_y < 250;
+  }
+
+  isBubbleAttacking() {
+    return this.world.keyboard.SPACE;
+  }
+
+  isFinslapAttacking() {
+    return this.world.keyboard.F;
   }
 }

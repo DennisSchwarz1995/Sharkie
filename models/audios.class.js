@@ -1,6 +1,9 @@
 class Audios {
+
+
   constructor() {
     this.backgroundMusic = new Audio('audio/background_music.mp3');
+    this.endbossBackgroundMusic = new Audio('audio/endboss-background_music.mp3');
     this.collectCoin = new Audio('audio/collect_coin.mp3');
     this.collectBottle = new Audio('audio/collect_bottle.mp3');
     this.jellyfishShock = new Audio('audio/shock.mp3');
@@ -9,9 +12,12 @@ class Audios {
     this.gameOver = new Audio('audio/game_over.mp3');
     this.bubble = new Audio('audio/bubble_pop.mp3');
     this.finslap = new Audio('audio/fin_slap.mp3')
+    this.endbossIntro = new Audio('audio/endboss_intro.mp3')
+    
 
     this.allAudios = [
       this.backgroundMusic,
+      this.endbossBackgroundMusic,
       this.collectCoin,
       this.collectBottle,
       this.jellyfishShock,
@@ -19,9 +25,12 @@ class Audios {
       this.characterFinSlap,
       this.gameOver,
       this.bubble,
-      this.finslap
+      this.finslap,
+      this.endbossIntro
     ];
+
   }
+
 
   setVolume(volume) {
     this.allAudios.forEach((audio) => {

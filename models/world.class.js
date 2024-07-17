@@ -1,12 +1,14 @@
 class World {
   assets;
   audios;
-  character;
+  character = new Character(this, assets);
   statusBar = new StatusBar();
   coinBar = new Coinbar();
   poisonBar = new PoisonBar();
   throwableObjects = [];
-  level;
+  level = level1;
+  endboss = this.level.endboss.find((endboss) => endboss instanceof Endboss);
+  endbossStatusBar = new EndbossStatusbar(this);
   canvas;
   ctx;
   keyboard;
@@ -14,17 +16,20 @@ class World {
   isInAttackAnimation = false;
 
   constructor(canvas, keyboard, assets, audios) {
-    this.ctx = canvas.getContext('2d');
+    this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
     this.assets = assets;
-    this.character = new Character(this, assets);
     this.audios = audios;
     this.audios.setVolume(0.05);
+    this.drawObjects();
+    this.setWorld();
+    this.checkGameState();
+    this.playBackgroundMusic();
   }
 
   setWorld() {
-    this.character.world = this;
+    this.endboss.world = this;
   }
 
   playBackgroundMusic() {
@@ -48,10 +53,15 @@ class World {
 
     this.addToCanvas(this.character);
 
+    if (this.endboss.isBossIntroduced) {
+      this.addToCanvas(this.endbossStatusBar);
+    }
+
     this.ctx.translate(-this.camera_x, 0);
     this.addToCanvas(this.statusBar);
     this.addToCanvas(this.coinBar);
     this.addToCanvas(this.poisonBar);
+
     this.ctx.translate(this.camera_x, 0);
 
     this.ctx.translate(-this.camera_x, 0);
@@ -117,7 +127,7 @@ class World {
         this.isInAttackAnimation = true;
         pufferfish.animatePufferFishDeath();
         setTimeout(() => {
-          if(this.level.pufferfish.position_y < 300) {
+          if (this.level.pufferfish.position_y < 300) {
             this.level.pufferfish.splice(index, 1);
           }
           this.isInAttackAnimation = false;
@@ -128,7 +138,8 @@ class World {
         this.character.isColliding(pufferfish) &&
         !this.character.isImmun() &&
         !this.character.isDead() &&
-        !this.isInAttackAnimation
+        !this.isInAttackAnimation &&
+        !pufferfish.isPufferFishDead
       ) {
         this.character.hit();
         this.character.isHitByPufferfish = true;
@@ -148,7 +159,8 @@ class World {
       if (
         this.character.isColliding(jellyfish) &&
         !this.character.isImmun() &&
-        !this.character.isDead()
+        !this.character.isDead() &&
+        !jellyfish.isJellyFishDead
       ) {
         this.character.hit();
         this.character.isHitByJellyfish = true;
@@ -211,7 +223,7 @@ class World {
       this.character.position_x + 150,
       this.character.position_y + 120,
       this.character.otherDirection,
-      'img/1.Sharkie/4.Attack/Bubble trap/Bubble.png'
+      "img/1.Sharkie/4.Attack/Bubble trap/Bubble.png"
     );
     this.throwableObjects.push(bubble);
     this.audios.bubble.play();
@@ -222,7 +234,7 @@ class World {
       this.character.position_x + 150,
       this.character.position_y + 120,
       this.character.otherDirection,
-      'img/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png'
+      "img/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png"
     );
     this.throwableObjects.push(bubble);
     this.audios.bubble.play();

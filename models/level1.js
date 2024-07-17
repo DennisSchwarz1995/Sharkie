@@ -2,6 +2,7 @@ let level1;
 
 function generateLevel() {
   level1 = new Level(
+
     [
       new PufferFish_Red(575),
       new PufferFish_Green(725),
@@ -22,7 +23,9 @@ function generateLevel() {
       new JellyFish_Yellow(2050, 400),
     ],
 
-    [new Endboss(2800)],
+    [
+      new Endboss()
+    ],
 
     [
       new Water("img/3. Background/Layers/5. Water/D2.png", -720),
@@ -82,5 +85,5 @@ function generateLevel() {
       new PoisonBottle(1800),
       new PoisonBottle(2250),
     ]
-  );
+  )
 }

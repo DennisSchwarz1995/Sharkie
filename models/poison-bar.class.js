@@ -14,7 +14,7 @@ class PoisonBar extends DrawableObject {
     this.position_x = 500;
     this.position_y = 0;
     this.height = 40;
-    this.width = 220;
+    this.width = 180;
     this.setPercentage(0, this.POISON_BAR_IMAGES);
   }
 }

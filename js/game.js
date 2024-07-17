@@ -2,8 +2,7 @@ let canvas;
 let world;
 let keyboard = new Keyboard();
 let assets = new Assets();
-let audios;
-let mute = true;
+let audios = new Audios();
 let fullscreen = false;
 let gameStarted = false;
 let intervalIds = [];
@@ -11,18 +10,14 @@ let isControlInfoOpen = false;
 
 function init() {
   canvas = document.getElementById("canvas");
-  audios = new Audios();
   world = new World(canvas, keyboard, assets, audios);
+  let sliderValue = document.getElementById("slider").value;
+  setAudioVolume(sliderValue);
 }
 
 function startGame() {
-  generateLevel();
-  world.level = level1;
-  world.drawObjects();
-  world.setWorld();
-  world.checkGameState();
-  // world.playBackgroundMusic();
   hideStartScreen();
+  generateLevel();
 }
 
 function hideStartScreen() {
@@ -42,8 +37,8 @@ function toggleSoundSlider() {
 
 function setAudioVolume(value) {
   let volume = value / 100;
-  audios.setVolume(volume); 
-  document.getElementById('sliderValue').innerText = value;
+  audios.setVolume(volume);
+  document.getElementById("sliderValue").innerText = value;
 }
 
 function toggleFullscreen() {
@@ -73,40 +68,24 @@ function toggleControlInfo() {
 }
 
 window.addEventListener("keydown", (event) => {
-  if (event.keyCode == 40) {
+  if (event.keyCode == 40 || event.keyCode == 83) {
     keyboard.DOWN = true;
   }
 
-  if (event.keyCode == 39) {
+  if (event.keyCode == 39 || event.keyCode == 68) {
     keyboard.RIGHT = true;
   }
 
-  if (event.keyCode == 38) {
+  if (event.keyCode == 38 || event.keyCode == 87) {
     keyboard.UP = true;
   }
 
-  if (event.keyCode == 37) {
+  if (event.keyCode == 37 || event.keyCode == 65) {
     keyboard.LEFT = true;
   }
 
   if (event.keyCode == 32) {
     keyboard.SPACE = true;
-  }
-
-  if (event.keyCode == 83) {
-    keyboard.DOWN = true;
-  }
-
-  if (event.keyCode == 68) {
-    keyboard.RIGHT = true;
-  }
-
-  if (event.keyCode == 87) {
-    keyboard.UP = true;
-  }
-
-  if (event.keyCode == 65) {
-    keyboard.LEFT = true;
   }
 
   if (event.keyCode == 70) {
@@ -119,40 +98,24 @@ window.addEventListener("keydown", (event) => {
 });
 
 window.addEventListener("keyup", (event) => {
-  if (event.keyCode == 40) {
+  if (event.keyCode == 40 || event.keyCode == 83) {
     keyboard.DOWN = false;
   }
 
-  if (event.keyCode == 39) {
+  if (event.keyCode == 39 || event.keyCode == 68) {
     keyboard.RIGHT = false;
   }
 
-  if (event.keyCode == 38) {
+  if (event.keyCode == 38 || event.keyCode == 87) {
     keyboard.UP = false;
   }
 
-  if (event.keyCode == 37) {
+  if (event.keyCode == 37 || event.keyCode == 65) {
     keyboard.LEFT = false;
   }
 
   if (event.keyCode == 32) {
     keyboard.SPACE = false;
-  }
-
-  if (event.keyCode == 83) {
-    keyboard.DOWN = false;
-  }
-
-  if (event.keyCode == 68) {
-    keyboard.RIGHT = false;
-  }
-
-  if (event.keyCode == 87) {
-    keyboard.UP = false;
-  }
-
-  if (event.keyCode == 65) {
-    keyboard.LEFT = false;
   }
 
   if (event.keyCode == 70) {
