@@ -1,8 +1,22 @@
 let level1;
 
+/**
+ * Generates a new level with various game objects and background elements.
+ *
+ * This function initializes a new level with the following elements:
+ * - **PufferFish**: Different types of PufferFish (Red, Green, Orange) positioned at specified x-coordinates.
+ * - **JellyFish**: Different types of JellyFish (Green, Purple, Pink, Yellow) positioned at specified x and y-coordinates.
+ * - **Endboss**: An instance of the Endboss.
+ * - **Background Objects**: A sequence of background layers (Water and other layers) at various x-coordinates to create a scrolling effect.
+ * - **Light**: An instance of Light.
+ * - **Coins**: A set of Coin objects positioned at specified x-coordinates.
+ * - **Poison Bottles**: A set of PoisonBottle objects positioned at specified x-coordinates.
+ *
+ * The level layout is designed to provide a diverse and challenging environment for the player,
+ * with various types of enemies, collectibles, and background layers.
+ */
 function generateLevel() {
   level1 = new Level(
-
     [
       new PufferFish_Red(575),
       new PufferFish_Green(725),
@@ -23,45 +37,50 @@ function generateLevel() {
       new JellyFish_Yellow(2050, 400),
     ],
 
+    [new Endboss()],
+
     [
-      new Endboss()
+      new Water('img/3. Background/Layers/5. Water/D2.png', -720),
+      new BackgroundObject('img/3. Background/Layers/4.Fondo 2/D2.png', -720),
+      new BackgroundObject('img/3. Background/Layers/3.Fondo 1/D2.png', -720),
+      new BackgroundObject('img/3. Background/Layers/2. Floor/D2.png', -720),
+
+      new Water('img/3. Background/Layers/5. Water/D1.png', 0),
+      new BackgroundObject('img/3. Background/Layers/4.Fondo 2/D1.png', 0),
+      new BackgroundObject('img/3. Background/Layers/3.Fondo 1/D1.png', 0),
+      new BackgroundObject('img/3. Background/Layers/2. Floor/D1.png', 0),
+      new Water('img/3. Background/Layers/5. Water/D2.png', 720),
+      new BackgroundObject('img/3. Background/Layers/4.Fondo 2/D2.png', 720),
+      new BackgroundObject('img/3. Background/Layers/3.Fondo 1/D2.png', 720),
+      new BackgroundObject('img/3. Background/Layers/2. Floor/D2.png', 720),
+
+      new Water('img/3. Background/Layers/5. Water/D1.png', 1440),
+      new BackgroundObject('img/3. Background/Layers/4.Fondo 2/D1.png', 1440),
+      new BackgroundObject('img/3. Background/Layers/3.Fondo 1/D1.png', 1440),
+      new BackgroundObject('img/3. Background/Layers/2. Floor/D1.png', 1440),
+      new Water('img/3. Background/Layers/5. Water/D2.png', 2160),
+      new BackgroundObject('img/3. Background/Layers/4.Fondo 2/D2.png', 2160),
+      new BackgroundObject('img/3. Background/Layers/3.Fondo 1/D2.png', 2160),
+      new BackgroundObject('img/3. Background/Layers/2. Floor/D2.png', 2160),
+
+      new Water('img/3. Background/Layers/5. Water/D1.png', 2880),
+      new BackgroundObject('img/3. Background/Layers/4.Fondo 2/D1.png', 2880),
+      new BackgroundObject('img/3. Background/Layers/3.Fondo 1/D1.png', 2880),
+      new BackgroundObject('img/3. Background/Layers/2. Floor/D1.png', 2880),
+      new Water('img/3. Background/Layers/5. Water/D2.png', 3600),
+      new BackgroundObject('img/3. Background/Layers/4.Fondo 2/D2.png', 3600),
+      new BackgroundObject('img/3. Background/Layers/3.Fondo 1/D2.png', 3600),
+      new BackgroundObject('img/3. Background/Layers/2. Floor/D2.png', 3600),
     ],
 
     [
-      new Water("img/3. Background/Layers/5. Water/D2.png", -720),
-      new BackgroundObject("img/3. Background/Layers/4.Fondo 2/D2.png", -720),
-      new BackgroundObject("img/3. Background/Layers/3.Fondo 1/D2.png", -720),
-      new BackgroundObject("img/3. Background/Layers/2. Floor/D2.png", -720),
-
-      new Water("img/3. Background/Layers/5. Water/D1.png", 0),
-      new BackgroundObject("img/3. Background/Layers/4.Fondo 2/D1.png", 0),
-      new BackgroundObject("img/3. Background/Layers/3.Fondo 1/D1.png", 0),
-      new BackgroundObject("img/3. Background/Layers/2. Floor/D1.png", 0),
-      new Water("img/3. Background/Layers/5. Water/D2.png", 720),
-      new BackgroundObject("img/3. Background/Layers/4.Fondo 2/D2.png", 720),
-      new BackgroundObject("img/3. Background/Layers/3.Fondo 1/D2.png", 720),
-      new BackgroundObject("img/3. Background/Layers/2. Floor/D2.png", 720),
-
-      new Water("img/3. Background/Layers/5. Water/D1.png", 1440),
-      new BackgroundObject("img/3. Background/Layers/4.Fondo 2/D1.png", 1440),
-      new BackgroundObject("img/3. Background/Layers/3.Fondo 1/D1.png", 1440),
-      new BackgroundObject("img/3. Background/Layers/2. Floor/D1.png", 1440),
-      new Water("img/3. Background/Layers/5. Water/D2.png", 2160),
-      new BackgroundObject("img/3. Background/Layers/4.Fondo 2/D2.png", 2160),
-      new BackgroundObject("img/3. Background/Layers/3.Fondo 1/D2.png", 2160),
-      new BackgroundObject("img/3. Background/Layers/2. Floor/D2.png", 2160),
-
-      new Water("img/3. Background/Layers/5. Water/D1.png", 2880),
-      new BackgroundObject("img/3. Background/Layers/4.Fondo 2/D1.png", 2880),
-      new BackgroundObject("img/3. Background/Layers/3.Fondo 1/D1.png", 2880),
-      new BackgroundObject("img/3. Background/Layers/2. Floor/D1.png", 2880),
-      new Water("img/3. Background/Layers/5. Water/D2.png", 3600),
-      new BackgroundObject("img/3. Background/Layers/4.Fondo 2/D2.png", 3600),
-      new BackgroundObject("img/3. Background/Layers/3.Fondo 1/D2.png", 3600),
-      new BackgroundObject("img/3. Background/Layers/2. Floor/D2.png", 3600),
+      new Light(0),
+      new Light(720),
+      new Light(1440),
+      new Light(2160),
+      new Light(2880),
+      new Light(3600),
     ],
-
-    [new Light()],
 
     [
       new Coin(423),
@@ -85,5 +104,5 @@ function generateLevel() {
       new PoisonBottle(1800),
       new PoisonBottle(2250),
     ]
-  )
+  );
 }

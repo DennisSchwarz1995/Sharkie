@@ -1,4 +1,8 @@
 class PoisonBar extends DrawableObject {
+   /**
+   * Creates an instance of `PoisonBar`.
+   * Initializes the poison bar's properties and loads the relevant images.
+   */
   POISON_BAR_IMAGES = [
     'img/4. Marcadores/orange/0_ copia.png',
     'img/4. Marcadores/orange/20_ copia.png',

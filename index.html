@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" translate="no">
+<html lang='en' translate='no'>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <link rel="icon" href="img/1.Sharkie/1.IDLE/1.png" />
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <link rel='stylesheet' href='style.css' />
+    <link rel='icon' href='img/1.Sharkie/1.IDLE/1.png' />
     <script src='models/drawable-object.class.js'></script>
     <script src='models/movable-object.class.js'></script>
     <script src='models/animation-object.class.js'></script>
@@ -36,84 +36,158 @@
     <script src='js/game.js'></script>
     <title>Sharkie</title>
   </head>
-  <body>
-    <main id="startScreen" class="startScreen">
-      <h1>Sharkie the Game</h1>
-      <div id="options" class="options">
-        <button
-          onclick="startGame();init()"
-          id="startGameButton"
-          class="startGameButton"
-        >
-          Start
-        </button>
-        <button
-          onclick="toggleControlInfo()"
-          id="controlsButton"
-          class="controlsButton"
-        >
-          Controls
-        </button>
-        <a href="imprint.html" target="_blank" class="imprintButton">Imprint</a>
-      </div>
-
-      <div class="utilityButtons">
-        <div id="volumeSlider" class="volumeSlider d-none">
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value="5"
-            id="slider"
-            class="slider"
-            oninput="setAudioVolume(this.value)"
-            onchange="setAudioVolume(this.value)"
-          />
-          <p id="sliderValue" class="sliderValue">5</p>
+  <body onload='initListeners();checkDeviceDisplaySize()'>
+    <section id='canvasContainer' class='canvasContainer'>
+      <main id='startScreen' class='startScreen'>
+        <h1>Sharkie the Game</h1>
+        <div id='options' class='options'>
+          <button
+            onclick='startGame();init()'
+            id='startGameButton'
+            class='startGameButton'
+          >
+            Start
+          </button>
+          <button
+            onclick='toggleInfo()'
+            id='controlsButton'
+            class='controlsButton'
+          >
+            Info
+          </button>
+          <a href='imprint.html' target='_blank' class='imprintButton'
+            >Imprint</a
+          >
         </div>
-        <img
-          onclick="toggleSoundSlider()"
-          src="img/6.Botones/Full Screen/sound-icon.svg.png"
-          id="muteButton"
-          class="muteButton"
-        />
-        <img
-          onclick="toggleFullscreen()"
-          src="img/6.Botones/Full Screen/fullscreen-icon.png"
-          id="resizeButton"
-          class="resizeButton"
-        />
-      </div>
-    </main>
+        <div class='utilityButtons'>
+          <div class='utilityContainer'>
+            <img
+              onclick='toggleSoundSlider(event)'
+              src='img/6.Botones/Full Screen/sound-icon.svg.png'
+              id='muteButton'
+              class='muteButton'
+            />
+            <img
+              onclick='toggleFullscreen()'
+              src='img/6.Botones/Full Screen/fullscreen-icon.png'
+              id='resizeButton'
+              class='resizeButton'
+            />
+          </div>
+          <div class='sliderContainer'>
+            <div id='volumeSlider' class='volumeSlider invisible'>
+              <input
+                type='range'
+                min='0'
+                max='100'
+                value='5'
+                id='slider'
+                class='slider'
+                oninput='setAudioVolume(this.value)'
+                onchange='setAudioVolume(this.value)'
+              />
+              <span id='sliderValue' class='sliderValue'>5</span>
+            </div>
+          </div>
+        </div>
+      </main>
 
-    <section id="controls" class="controls d-none">
-      <div onclick="toggleControlInfo()" class="backButtonDiv">
-        <button class="backButton">X</button>
-      </div>
-      <div class="instructions">
-        <img
-          class="arrowKeys"
-          src="img/6.Botones/Key/arrow keys.png"
-          alt="arrowkeys"
-        />
-        <p>Move Sharkie</p>
-      </div>
-      <div class="instructions">
-        <img class="dKey" src="img/6.Botones/Key/D key.png" alt="dkey" />
-        <p>Finslap</p>
-      </div>
-      <div class="instructions">
-        <img
-          class="spacebar"
-          src="img/6.Botones/Key/Space Bar key.png"
-          alt="spacebar"
-        />
-        <p>Bubble Attack</p>
+      <section id='info' class='info d-none'>
+        <button class='infoCloseButton' onclick='toggleInfo()'>X</button>
+        <p class='infoText'>
+          WELCOME TO SHARKIE. <br />
+          THE GOAL IS TO DEFEAT THE <font style='color: blue'>ENDBOSS</font>.
+          <br />
+          TO ENCOUNTER THE <font style='color: blue'>ENDBOSS</font> YOU NEED TO
+          COMPLETELY FILL YOUR <font style='color: gold'>COINBAR</font> AND
+          REACH THE END OF THE LEVEL. ON YOUR WAY YOU WILL ENCOUNTER
+          <font style='color: violet'>JELLYFISH</font> WHICH YOU CAN DEFEAT WITH
+          THE <font style='color: cadetblue'>BUBBLE-ATTACK</font> AND
+          <font style='color: orange'>PUFFERFISH</font> WHICH YOU CAN DEFEAT
+          WITH THE <font style='color: orangered'>FINSLAP</font>. ALSO YOU CAN
+          COLLECT <font style='color: greenyellow'>POISON BOTTLES</font> TO FILL
+          UP YOUR POISONBAR, THIS WILL BE HELPFUL FOR THE
+          <font style='color: blue'>ENDBOSS</font>. THE
+          <font style='color: blue'>ENDBOSS</font> WILL FOLLOW YOU! TRY TO AVOID
+          AND SLOW HIM WITH THE
+          <font style='color: cadetblue'>BUBBLE-ATTACK</font> IN COMBINATION
+          WITH <font style='color: greenyellow'>POISON BOTTLES</font>.
+        </p>
+        <p class='controls'>CONTROLS:</p>
+        <div class='movementKeys'>
+          <div class='keyColumn'>
+            <span>MOVE</span>
+            <div class='key'><span>W</span></div>
+            <div class='keyRow'>
+              <div class='key'><span>A</span></div>
+              <div class='key'><span>S</span></div>
+              <div class='key'><span>D</span></div>
+            </div>
+          </div>
+          <div class='keyColumn'>
+            <span>MOVE</span>
+            <div class='key'><span>&#11205;</span></div>
+            <div class='keyRow'>
+              <div class='key'><span>&#11207;</span></div>
+              <div class='key'><span>&#11206;</span></div>
+              <div class='key'><span>&#11208;</span></div>
+            </div>
+          </div>
+        </div>
+        <div class='attackKeys'>
+          <div class='keyColumn'>
+            <span>FINSLAP</span>
+            <div class='key'><span>F</span></div>
+          </div>
+          <div class='keyColumn'>
+            <span>BUBBLE-ATTACK</span>
+            <div class='key'><span>SPACEBAR</span></div>
+          </div>
+        </div>
+      </section>
+      <canvas id='canvas' width='720' height='480'></canvas>
+      <div id='stopGameButtonDiv' class='stopGameButtonDiv'>
+        <button
+          onclick='restartGame()'
+          id='stopGameButton'
+          class='stopGameButton d-none'
+        >
+          X
+        </button>
       </div>
     </section>
 
-    <div id="fullscreen">
-      <canvas id="canvas" width="720" height="480"></canvas>
-    </div>
+    <section class='mobileButtons'>
+      <div class='movementKeys'>
+        <div class='keyRow'>
+          <div id='up' class='key'><span>&#11205;</span></div>
+          <div id='down' class='key'><span>&#11206;</span></div>
+          <div id='left' class='key'><span>&#11207;</span></div>
+          <div id='right' class='key'><span>&#11208;</span></div>
+        </div>
+      </div>
+      <div class='attackKeys'>
+        <div class='keyColumn'>
+          <div id='space' class='key'><span>SPACE</span></div>
+        </div>
+        <div class='keyColumn'>
+          <div id='f' class='key'><span>F</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id='winOverlay' class='winOverlay overlay d-none'>
+      <img src='img/6.Botones/Tittles/You win/Recurso 21.png' alt='win' />
+      <button onclick='restartGame()' class='restartButton'>Restart</button>
+    </section>
+
+    <section id='looseOverlay' class='looseOverlay overlay d-none'>
+      <img src='img/6.Botones/Tittles/Game Over/Recurso 12.png' alt='loose' />
+      <button onclick='restartGame()' class='restartButton'>Restart</button>
+    </section>
+
+    <section id='turnDeviceOverlay' class='turnDeviceOverlay'>
+      <span>PLEASE TURN YOUR DEVICE!</span>
+    </section>
   </body>
 </html>

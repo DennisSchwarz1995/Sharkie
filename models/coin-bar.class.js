@@ -1,11 +1,15 @@
 class Coinbar extends DrawableObject {
+  /**
+   * Creates an instance of `Coinbar`.
+   * Sets the initial position, size, and loads images for different coin bar states.
+   */
   COIN_BAR_IMAGES = [
-    "img/4. Marcadores/orange/0_  copia 2.png",
-    "img/4. Marcadores/orange/20_  copia.png",
-    "img/4. Marcadores/orange/40_  copia 2.png",
-    "img/4. Marcadores/orange/60_  copia 2.png",
-    "img/4. Marcadores/orange/80_  copia 2.png",
-    "img/4. Marcadores/orange/100_ copia 2.png",
+    'img/4. Marcadores/orange/0_  copia 2.png',
+    'img/4. Marcadores/orange/20_  copia.png',
+    'img/4. Marcadores/orange/40_  copia 2.png',
+    'img/4. Marcadores/orange/60_  copia 2.png',
+    'img/4. Marcadores/orange/80_  copia 2.png',
+    'img/4. Marcadores/orange/100_ copia 2.png',
   ];
 
   constructor() {

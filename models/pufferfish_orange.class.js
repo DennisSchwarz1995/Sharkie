@@ -1,4 +1,8 @@
 class PufferFish_Orange extends AnimationObject {
+     /**
+   * Creates an instance of `Pufferfish_Orange`.
+   * @param {number} position_x - The initial X position of the jellyfish.
+   */
   height = 70;
   width = 75;
   offset = {
@@ -19,19 +23,19 @@ class PufferFish_Orange extends AnimationObject {
   ];
 
   TRANSITION_IMAGES = [
-    "img/2.Enemy/1.Puffer fish (3 color options)/2.transition/2.transition1.png",
-    "img/2.Enemy/1.Puffer fish (3 color options)/2.transition/2.transition2.png",
-    "img/2.Enemy/1.Puffer fish (3 color options)/2.transition/2.transition3.png",
-    "img/2.Enemy/1.Puffer fish (3 color options)/2.transition/2.transition4.png",
-    "img/2.Enemy/1.Puffer fish (3 color options)/2.transition/2.transition5.png",
+    'img/2.Enemy/1.Puffer fish (3 color options)/2.transition/2.transition1.png',
+    'img/2.Enemy/1.Puffer fish (3 color options)/2.transition/2.transition2.png',
+    'img/2.Enemy/1.Puffer fish (3 color options)/2.transition/2.transition3.png',
+    'img/2.Enemy/1.Puffer fish (3 color options)/2.transition/2.transition4.png',
+    'img/2.Enemy/1.Puffer fish (3 color options)/2.transition/2.transition5.png',
   ];
 
   PUFF_UP_IMAGES = [
-    "img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/2.bubbleswim1.png",
-    "img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/2.bubbleswim2.png",
-    "img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/2.bubbleswim3.png",
-    "img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/2.bubbleswim4.png",
-    "img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/2.bubbleswim5.png",
+    'img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/2.bubbleswim1.png',
+    'img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/2.bubbleswim2.png',
+    'img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/2.bubbleswim3.png',
+    'img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/2.bubbleswim4.png',
+    'img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/2.bubbleswim5.png',
   ];
 
   DEAD_IMAGES = [

@@ -1,4 +1,9 @@
 class JellyFish_Pink extends AnimationObject {
+    /**
+   * Creates an instance of `JellyFish_Pink`.
+   * @param {number} position_x - The initial X position of the jellyfish.
+   * @param {number} position_y - The initial Y position of the jellyfish.
+   */
   MOTION_IMAGES = [
     'img/2.Enemy/2 Jelly fish/Súper dangerous/Pink 1.png',
     'img/2.Enemy/2 Jelly fish/Súper dangerous/Pink 2.png',

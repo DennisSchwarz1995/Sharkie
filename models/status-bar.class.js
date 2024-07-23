@@ -1,4 +1,8 @@
 class StatusBar extends DrawableObject {
+  /**
+   * Creates an instance of `StatusBar`.
+   * Initializes the status bar's properties, loads the images, and sets the initial percentage.
+   */
   LIFE_BAR_IMAGES = [
     'img/4. Marcadores/orange/0_  copia.png',
     'img/4. Marcadores/orange/20_ copia 2.png',
