@@ -338,7 +338,8 @@ class World {
         this.character.isColliding(endboss) &&
         !this.character.isImmun() &&
         !this.character.isDead() &&
-        !endboss.isEndbossDead
+        !endboss.isEndbossDead && 
+        endboss.isBossIntroduced
       ) {
         this.character.hit();
         this.character.isHitByEndboss = true;
