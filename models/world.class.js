@@ -338,7 +338,7 @@ class World {
         this.character.isColliding(endboss) &&
         !this.character.isImmun() &&
         !this.character.isDead() &&
-        !endboss.isEndbossDead && 
+        !endboss.isEndbossDead &&
         endboss.isBossIntroduced
       ) {
         this.character.hit();
@@ -439,7 +439,13 @@ class World {
    * The bubble is positioned relative to the character and moves in the direction the character is facing.
    */
   shootBubble() {
-    let bubble = new ThrowableObject(this.character.position_x + 150, this.character.position_y + 120, this.character.otherDirection, 'img/1.Sharkie/4.Attack/Bubble trap/Bubble.png', 'normal');
+    let bubble = new ThrowableObject(
+      this.character.position_x + 150,
+      this.character.position_y + 120,
+      this.character.otherDirection,
+      'img/1.Sharkie/4.Attack/Bubble trap/Bubble.png',
+      'normal'
+    );
     this.throwableObjects.push(bubble);
     this.audios.bubble.play();
   }
@@ -449,7 +455,13 @@ class World {
    * The bubble is positioned relative to the character, moves in the direction the character is facing, and reduces the character's poison level by 20.
    */
   shootPoisonBubble() {
-    let bubble = new ThrowableObject(this.character.position_x + 150, this.character.position_y + 120, this.character.otherDirection, 'img/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png', 'poison');
+    let bubble = new ThrowableObject(
+      this.character.position_x + 150,
+      this.character.position_y + 120,
+      this.character.otherDirection,
+      'img/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png',
+      'poison'
+    );
     this.throwableObjects.push(bubble);
     this.audios.bubble.play();
     this.character.poison -= 20;

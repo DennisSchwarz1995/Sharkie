@@ -42,6 +42,77 @@ class Character extends AnimationObject {
   }
 
   /**
+   * Updates the character's actions based on its current state.
+   * Handles different animations and sounds for the character depending on whether
+   * the character is dead, attacking, moving, or hurt.
+   */
+  updateCharacterActions() {
+    if (this.isDead()) {
+      this.handleDeathAnimation(characterAnimation);
+    } else if (this.isBubbleAttacking()) {
+      this.handleBubbleAttack();
+    } else if (this.isFinslapAttacking()) {
+      this.handleFinslapAttack();
+    } else if (this.isMoving() && !this.isHurt()) {
+      this.playAnimation(this.assets.SWIMMING_IMAGES);
+      this.world.audios.characterSwim.play();
+    } else if (this.isHurt()) {
+      this.handleHurtAnimation();
+    } else {
+      this.playAnimation(this.assets.IDLE_IMAGES);
+    }
+  }
+
+  /**
+   * Gets the attack parameters based on the given type.
+   *
+   * @param {string} type - The type of the attack action (e.g., 'bubble', 'poisonBubble', 'finslap').
+   * @returns {Object} The attack parameters including interval, key, and action.
+   */
+  getAttackParameters(type) {
+    let attackActions = {
+      bubble: {
+        interval: 50,
+        key: 'SPACE',
+        action: () => this.world.shootBubble(),
+      },
+      poisonBubble: {
+        interval: 50,
+        key: 'SPACE',
+        action: () => this.world.shootPoisonBubble(),
+      },
+      finslap: {
+        interval: 150,
+        key: 'F',
+        action: () => this.world.audios.finslap.play(),
+      },
+    };
+
+    return attackActions[type];
+  }
+
+  /**
+   * Starts the attack animation for the character.
+   *
+   * @param {number} interval - The interval time for the attack animation.
+   * @param {string} key - The key to trigger the attack action.
+   * @param {Function} action - The action function to execute for the attack.
+   */
+  startAttackAnimation(interval, key, action) {
+    let attackAnimation = setStoppableInterval(() => {
+      this.isAttacking = true;
+      this.world.keyboard[key] = true;
+    }, interval);
+
+    setStoppableTimeout(() => {
+      clearInterval(attackAnimation);
+      this.isAttacking = false;
+      this.world.keyboard[key] = false;
+      action();
+    }, 800);
+  }
+
+  /**
    * Triggers the death animation based on the cause of death.
    * Ensures that the animation is played only once and sets the appropriate death animation based on the cause of death.
    *

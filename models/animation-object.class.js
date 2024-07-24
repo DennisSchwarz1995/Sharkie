@@ -40,82 +40,55 @@ class AnimationObject extends MovableObject {
 
   /**
    * Animates the character by managing its movement and various action states.
-   * It handles swimming in different directions and plays appropriate animations based on character state.
+   * It handles appropriate animations based on character state.
    */
   animateCharacter() {
     setStoppableInterval(() => {
-      if (this.isAbleToSwimRight()) {
-        this.swimRight();
-        this.otherDirection = false;
-      }
-      if (this.isAbleToSwimLeft()) {
-        this.swimLeft();
-        this.otherDirection = true;
-      }
-      if (this.isAbleToSwimUp()) {
-        this.swimUp();
-      }
-      if (this.isAbleToSwimDown()) {
-        this.swimDown();
-      }
-      this.updateCameraPosition();
+      this.animateCharacterMovement();
     }, 1000 / 60);
 
     let characterAnimation = setStoppableInterval(() => {
-      if (this.isDead()) {
-        this.handleDeathAnimation(characterAnimation);
-      } else if (this.isBubbleAttacking()) {
-        this.handleBubbleAttack();
-      } else if (this.isFinslapAttacking()) {
-        this.handleFinslapAttack();
-      } else if (this.isMoving() && !this.isHurt()) {
-        this.playAnimation(this.assets.SWIMMING_IMAGES);
-        this.world.audios.characterSwim.play();
-      } else if (this.isHurt()) {
-        this.handleHurtAnimation();
-      } else {
-        this.playAnimation(this.assets.IDLE_IMAGES);
-      }
+      this.updateCharacterActions(characterAnimation);
     }, 100);
   }
 
   /**
-   * Animates the character's attack based on the specified attack type.
-   * Supports 'bubble', 'poisonBubble', and 'finslap' attacks.
-   * Manages attack animation and action based on the type of attack.
+   * Animates the character by managing its movement.
+   * It handles swimming in different directions and plays appropriate animations based on character state.
+   */
+  animateCharacterMovement() {
+    if (this.isAbleToSwimRight()) {
+      this.swimRight();
+      this.otherDirection = false;
+    }
+    if (this.isAbleToSwimLeft()) {
+      this.swimLeft();
+      this.otherDirection = true;
+    }
+    if (this.isAbleToSwimUp()) {
+      this.swimUp();
+    }
+    if (this.isAbleToSwimDown()) {
+      this.swimDown();
+    }
+    this.updateCameraPosition();
+  }
+
+  /**
+   * Animates the character's attack based on the given type.
+   * Initializes the attack animation and sets up the appropriate intervals and actions.
    *
-   * @param {string} type - The type of attack to animate ('bubble', 'poisonBubble', 'finslap').
+   * @param {string} type - The type of the attack action (e.g., 'bubble', 'poisonBubble', 'finslap').
    */
   animateCharacterAttack(type) {
     if (!this.isAttacking) {
       this.currentMotionImage = 0;
-      let interval, key, action;
 
-      if (type === "bubble") {
-        interval = 50;
-        key = "SPACE";
-        action = () => this.world.shootBubble();
-      } else if (type === "poisonBubble") {
-        interval = 50;
-        key = "SPACE";
-        action = () => this.world.shootPoisonBubble();
-      } else if (type === "finslap") {
-        interval = 150;
-        key = "F";
-        action = () => this.world.audios.finslap.play();
+      let { interval, key, action } = this.getAttackParameters(type);
+
+      if (interval && key && action) {
+        this.startAttackAnimation(interval, key, action);
       }
-
-      let attackAnimation = setStoppableInterval(() => {
-        this.isAttacking = true;
-        this.world.keyboard[key] = true;
-      }, interval);
-
-      setStoppableTimeout(() => {
-        clearInterval(attackAnimation);
-        this.isAttacking = false;
-        this.world.keyboard[key] = false;
-        action();
-      }, 800);
     }
   }
 
@@ -139,7 +112,7 @@ class AnimationObject extends MovableObject {
 
     let pufferFishAnimation = setStoppableInterval(() => {
       if (this.isDead()) {
-        animatePufferFishDeath();
+        this.animatePufferFishDeath();
         clearInterval(pufferFishMovement, pufferFishAnimation);
         this.clearDirectionAndTransitionInterval();
       } else if (!this.isTransitioning && !this.isPuffedUp) {
