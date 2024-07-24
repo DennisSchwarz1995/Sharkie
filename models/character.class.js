@@ -31,7 +31,6 @@ class Character extends AnimationObject {
     this.assets = assets;
     this.loadImagesForMotion(this.assets.SWIMMING_IMAGES);
     this.loadImagesForMotion(this.assets.IDLE_IMAGES);
-    this.loadImagesForMotion(this.assets.SLEEPING_IMAGES);
     this.loadImagesForMotion(this.assets.HURT_POISONED_IMAGES);
     this.loadImagesForMotion(this.assets.HURT_SHOCKED_IMAGES);
     this.loadImagesForMotion(this.assets.POISONED_DEAD_IMAGES);
