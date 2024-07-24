@@ -5,21 +5,23 @@ class Audios {
    */
 
   constructor() {
-    this.backgroundMusic = new Audio('audio/background_music.mp3');
+    this.backgroundMusic = new Audio("audio/background_music.mp3");
     this.endbossBackgroundMusic = new Audio(
-      'audio/endboss-background_music.mp3'
+      "audio/endboss-background_music.mp3"
     );
-    this.collectCoin = new Audio('audio/collect_coin.mp3');
-    this.collectBottle = new Audio('audio/collect_bottle.mp3');
-    this.jellyfishShock = new Audio('audio/shock.mp3');
-    this.characterSwim = new Audio('audio/swimming.mp3');
-    this.characterFinSlap = new Audio('audio/fin_slap.mp3');
-    this.characterHurt = new Audio('audio/character_hurt.mp3');
-    this.gameWin = new Audio('audio/game_win.mp3');
-    this.gameOver = new Audio('audio/game_over.mp3');
-    this.bubble = new Audio('audio/bubble_pop.mp3');
-    this.finslap = new Audio('audio/fin_slap.mp3');
-    this.endbossIntro = new Audio('audio/endboss_intro.mp3');
+    this.collectCoin = new Audio("audio/collect_coin.mp3");
+    this.collectBottle = new Audio("audio/collect_bottle.mp3");
+    this.jellyfishShock = new Audio("audio/shock.mp3");
+    this.characterSwim = new Audio("audio/swimming.mp3");
+    this.characterFinSlap = new Audio("audio/fin_slap.mp3");
+    this.characterHurt = new Audio("audio/character_hurt.mp3");
+    this.gameWin = new Audio("audio/game_win.mp3");
+    this.gameOver = new Audio("audio/game_over.mp3");
+    this.bubble = new Audio("audio/bubble_pop.mp3");
+    this.finslap = new Audio("audio/fin_slap.mp3");
+    this.endbossIntro = new Audio("audio/endboss_intro.mp3");
+    this.isMuted = false;
+    this.previousVolume = 1;
 
     this.allAudios = [
       this.backgroundMusic,
@@ -47,5 +49,35 @@ class Audios {
     this.allAudios.forEach((audio) => {
       audio.volume = volume;
     });
+  }
+
+  /**
+   * Mutes all audio elements by setting their volume to 0.
+   * Stores the current volume level before muting.
+   */
+  mute() {
+    this.previousVolume = this.allAudios[0].volume; // Assuming all audios have the same volume
+    this.setVolume(0);
+    this.isMuted = true;
+  }
+
+  /**
+   * Unmutes all audio elements by restoring their previous volume level.
+   */
+  unmute() {
+    this.setVolume(this.previousVolume);
+    this.isMuted = false;
+  }
+
+  /**
+   * Toggles the mute state of all audio elements.
+   * If currently muted, it will unmute them, and vice versa.
+   */
+  toggleMute() {
+    if (this.isMuted) {
+      this.unmute();
+    } else {
+      this.mute();
+    }
   }
 }

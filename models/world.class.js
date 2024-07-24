@@ -1,5 +1,5 @@
 class World {
-   /**
+  /**
    * Creates an instance of `World`.
    * @param {HTMLCanvasElement} canvas - The canvas element used for rendering the game.
    * @param {Keyboard} keyboard - The keyboard input manager.
@@ -40,14 +40,12 @@ class World {
 
   /**
    * Sets the world context for the endboss.
-   * This is typically used to establish the relationship between the endboss and the current world.
    */
   setWorld() {
     this.endboss.world = this;
   }
 
   /**
-   * Clears the entire canvas.
    * Sets the `isDrawing` flag to `false` and clears the drawing context.
    */
   clearCanvas() {
@@ -56,8 +54,7 @@ class World {
   }
 
   /**
-   * Starts playing the background music.
-   * Resets the music to the beginning, plays it, and sets it to loop indefinitely.
+   * Starts playing the background music, resets the music to the beginning, plays it, and sets it to loop indefinitely.
    */
   playBackgroundMusic() {
     this.audios.backgroundMusic.currentTime = 0;
@@ -66,33 +63,25 @@ class World {
   }
 
   /**
-   * Draws all game objects onto the canvas.
    * Clears the canvas if `isDrawing` is `true`, applies camera translation, and draws background objects, enemies, collectables, and the character.
    * Restores camera translation and draws character status bars.
    */
   drawObjects() {
     if (!this.isDrawing) return;
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.beginPath();
     this.ctx.translate(this.camera_x, 0);
-
     this.addObjectArraysToCanvas(this.level.backgroundObjects);
     this.drawEnemies();
     this.drawCollectables();
     this.addObjectArraysToCanvas(this.throwableObjects);
     this.addToCanvas(this.character);
-
     if (this.endboss.isBossIntroduced) {
       this.addToCanvas(this.endbossStatusBar);
     }
-
     this.ctx.translate(-this.camera_x, 0);
     this.drawCharacterBars();
     this.ctx.translate(this.camera_x, 0);
     this.ctx.translate(-this.camera_x, 0);
-
-    this.ctx.closePath();
-
     this.startFrames();
   }
 
@@ -145,9 +134,7 @@ class World {
     if (displayedObject.otherDirection) {
       this.rotateImageHorizontally(displayedObject);
     }
-
     displayedObject.draw(this.ctx);
-
     if (displayedObject.otherDirection) {
       this.restoreImageRotation(displayedObject);
     }
@@ -155,7 +142,6 @@ class World {
 
   /**
    * Adds multiple objects to the canvas.
-   * Iterates over an array of objects and calls `addToCanvas` for each one.
    *
    * @param {Array} objects - An array of objects to be added to the canvas.
    */
@@ -166,8 +152,7 @@ class World {
   }
 
   /**
-   * Rotates the image of a displayed object horizontally.
-   * This is used to flip the image when the object is facing the other direction.
+   * Used to flip the image when the object is facing the other direction.
    *
    * @param {Object} displayedObject - The object whose image is to be rotated.
    */
@@ -191,7 +176,6 @@ class World {
 
   /**
    * Periodically checks the game state for collisions and win/lose conditions.
-   * Uses a `setInterval` to perform these checks at a fixed interval.
    */
   checkGameState() {
     setStoppableInterval(() => {
@@ -202,9 +186,7 @@ class World {
   }
 
   /**
-   * Checks if the game has been won.
-   * If the character's hitpoints are above 0, the endboss's hitpoints are 0 or less, and the game has not been won yet,
-   * it sets the game as won, stops the background music, plays the win sound, and shows the win overlay.
+   * Sets the game as won, stops the background music, plays the win sound, and shows the win overlay.
    */
   checkGameWin() {
     if (
@@ -216,7 +198,7 @@ class World {
       this.audios.backgroundMusic.pause();
       this.audios.endbossBackgroundMusic.pause();
       this.audios.gameWin.play();
-      hideStopGameButton();
+      hideOptions();
       setTimeout(() => {
         stopGame();
         showOverlay('win');
@@ -225,9 +207,7 @@ class World {
   }
 
   /**
-   * Checks if the game is over.
-   * If the character's hitpoints are 0 or less and the game has not been marked as over yet,
-   * it sets the game as over, stops the background music, plays the game over sound, and shows the game over overlay.
+   * Sets the game as over, stops the background music, plays the game over sound, and shows the game over overlay.
    */
   checkGameOver() {
     if (this.character.hitpoints <= 0 && !this.gameOver) {
@@ -235,7 +215,7 @@ class World {
       this.audios.backgroundMusic.pause();
       this.audios.endbossBackgroundMusic.pause();
       this.audios.gameOver.play();
-      hideStopGameButton();
+      hideOptions();
       setTimeout(() => {
         stopGame();
         showOverlay('loose');
@@ -244,8 +224,7 @@ class World {
   }
 
   /**
-   * Checks for collisions between the character and various game elements such as enemies, collectables, and bubbles.
-   * Also checks if bubbles have traveled their maximum distance.
+   * Checks for collisions between the character and various game elements such as enemies, collectables, bubbles and how far the bubble has traveled.
    */
   checkCollision() {
     this.checkCollisionWithPufferfish();
@@ -264,40 +243,63 @@ class World {
    */
   checkCollisionWithPufferfish() {
     this.level.pufferfish.forEach((pufferfish, index) => {
-      if (
-        this.character.isColliding(pufferfish) &&
-        this.keyboard.F &&
-        !this.isInAttackAnimation
-      ) {
-        this.isInAttackAnimation = true;
-        pufferfish.animatePufferFishDeath();
-        setTimeout(() => {
-          if (this.level.pufferfish.position_y < 300) {
-            this.level.pufferfish.splice(index, 1);
-          }
-          this.isInAttackAnimation = false;
-        }, 800);
-      }
-
-      if (
-        this.character.isColliding(pufferfish) &&
-        !this.character.isImmun() &&
-        !this.character.isDead() &&
-        !this.isInAttackAnimation &&
-        !pufferfish.isPufferFishDead
-      ) {
-        this.character.hit();
-        this.character.isHitByPufferfish = true;
-        setTimeout(() => {
-          this.character.isHitByPufferfish = false;
-        }, 1000);
-        this.audios.characterHurt.play();
-        this.statusBar.setPercentage(
-          this.character.hitpoints,
-          this.statusBar.LIFE_BAR_IMAGES
-        );
+      if (this.character.isColliding(pufferfish)) {
+        if (this.keyboard.F && !this.isInAttackAnimation) {
+          this.attackPufferFish(pufferfish, index);
+        } else if (
+          !this.character.isImmun() &&
+          !this.character.isDead() &&
+          !this.isInAttackAnimation &&
+          !pufferfish.isPufferFishDead
+        ) {
+          this.collideWithPufferFish(pufferfish);
+        }
       }
     });
+  }
+
+  /**
+   * Handles the attack on a Pufferfish.
+   * This method initiates the attack animation on the Pufferfish and removes it from the level
+   * if it is positioned below a certain threshold.
+   *
+   * @param {Pufferfish} pufferfish - The Pufferfish object being attacked.
+   * @param {number} index - The index of the Pufferfish in the level's pufferfish array.
+   * @returns {void}
+   */
+  attackPufferFish(pufferfish, index) {
+    this.isInAttackAnimation = true;
+    pufferfish.animatePufferFishDeath();
+
+    setTimeout(() => {
+      // Check if the Pufferfish is below a certain position and remove it if true
+      if (this.level.pufferfish[index].position_y < 300) {
+        this.level.pufferfish.splice(index, 1);
+      }
+      this.isInAttackAnimation = false;
+    }, 800);
+  }
+
+  /**
+   * Handles the collision with a Pufferfish.
+   * This method processes the effects of the collision on the character, such as taking damage
+   * and updating the status bar. It also manages the character's hit state and plays the hurt sound.
+   *
+   * @returns {void}
+   */
+  collideWithPufferFish() {
+    this.character.hit();
+    this.character.isHitByPufferfish = true;
+
+    setTimeout(() => {
+      this.character.isHitByPufferfish = false;
+    }, 1000);
+
+    this.audios.characterHurt.play();
+    this.statusBar.setPercentage(
+      this.character.hitpoints,
+      this.statusBar.LIFE_BAR_IMAGES
+    );
   }
 
   /**
@@ -436,30 +438,17 @@ class World {
    * The bubble is positioned relative to the character and moves in the direction the character is facing.
    */
   shootBubble() {
-    let bubble = new ThrowableObject(
-      this.character.position_x + 150,
-      this.character.position_y + 120,
-      this.character.otherDirection,
-      'img/1.Sharkie/4.Attack/Bubble trap/Bubble.png',
-      'normal'
-    );
+    let bubble = new ThrowableObject(this.character.position_x + 150, this.character.position_y + 120, this.character.otherDirection, 'img/1.Sharkie/4.Attack/Bubble trap/Bubble.png', 'normal');
     this.throwableObjects.push(bubble);
     this.audios.bubble.play();
   }
 
   /**
    * Creates and adds a poison bubble to the throwable objects array.
-   * The bubble is positioned relative to the character, moves in the direction the character is facing,
-   * and reduces the character's poison level by 20.
+   * The bubble is positioned relative to the character, moves in the direction the character is facing, and reduces the character's poison level by 20.
    */
   shootPoisonBubble() {
-    let bubble = new ThrowableObject(
-      this.character.position_x + 150,
-      this.character.position_y + 120,
-      this.character.otherDirection,
-      'img/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png',
-      'poison'
-    );
+    let bubble = new ThrowableObject(this.character.position_x + 150, this.character.position_y + 120, this.character.otherDirection, 'img/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png', 'poison');
     this.throwableObjects.push(bubble);
     this.audios.bubble.play();
     this.character.poison -= 20;

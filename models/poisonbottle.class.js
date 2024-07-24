@@ -22,6 +22,6 @@ class PoisonBottle extends AnimationObject {
     this.position_y = 60 + Math.random() * (400 - 60);
     this.height = 60;
     this.width = 50;
-    this.animate();
+    this.animatePoisonBottle();
   }
 }

@@ -63,7 +63,7 @@
           <div class='utilityContainer'>
             <img
               onclick='toggleSoundSlider(event)'
-              src='img/6.Botones/Full Screen/sound-icon.svg.png'
+              src='img/6.Botones/Full Screen/sound-icon.png'
               id='muteButton'
               class='muteButton'
             />
@@ -146,18 +146,25 @@
         </div>
       </section>
       <canvas id='canvas' width='720' height='480'></canvas>
-      <div id='stopGameButtonDiv' class='stopGameButtonDiv'>
-        <button
-          onclick='restartGame()'
-          id='stopGameButton'
-          class='stopGameButton d-none'
-        >
-          X
-        </button>
+      <div id='gameOptions' class='gameOptions d-none'>
+        <img
+          onclick='goBackToStartScreen()'
+          id='backIcon'
+          class='backIcon'
+          src='img/6.Botones/back.png'
+          alt='back'
+        />
+        <img
+          onclick='mute()'
+          id='muteIcon'
+          class='muteIcon'
+          src='img/6.Botones/mute.png'
+          alt='mute'
+        />
       </div>
     </section>
 
-    <section class='mobileButtons'>
+    <section id="mobileButtons" class='mobileButtons'>
       <div class='movementKeys'>
         <div class='keyRow'>
           <div id='up' class='key'><span>&#11205;</span></div>

@@ -26,6 +26,8 @@ class JellyFish_Pink extends AnimationObject {
     this.height = 90;
     this.offset.top = 6;
     this.offset.bottom = 10;
+    this.offset.left = 5;
+    this.offset.right = 5;
     this.position_x = position_x;
     this.position_y = position_y;
     this.direction_x = 'right';

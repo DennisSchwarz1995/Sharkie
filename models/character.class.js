@@ -20,9 +20,9 @@ class Character extends AnimationObject {
   deadFromEndboss = false;
   offset = {
     top: 95,
-    bottom: 40,
-    left: 30,
-    right: 30,
+    bottom: 45,
+    left: 40,
+    right: 40,
   };
 
   constructor(world, assets) {

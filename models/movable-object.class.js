@@ -72,7 +72,7 @@ class MovableObject extends DrawableObject {
     if (poison) {
       this.speed_x = 1.2;
       setStoppableTimeout(() => {
-        this.speed_x = 5;
+        this.speed_x = 10;
       }, 1500);
     }
   }

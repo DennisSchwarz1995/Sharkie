@@ -65,7 +65,7 @@ class Endboss extends AnimationObject {
   offset = {
     top: 90,
     bottom: 60,
-    left: 10,
+    left: 15,
     right: 10,
   };
 
@@ -79,6 +79,7 @@ class Endboss extends AnimationObject {
     this.direction_x = 'left';
     this.direction_y = 'up';
     this.position_x = 2800;
+    this.speed_x = 10;
     this.checkEndbossIntroduction();
   }
 
@@ -206,7 +207,8 @@ class Endboss extends AnimationObject {
    * @param {number} endbossMovement - The interval ID for the endboss's movement.
    */
   handleEndbossDeath(endbossAnimation, endbossMovement) {
-    this.clearIntervals(endbossAnimation, endbossMovement);
+    clearInterval(endbossAnimation);
+    clearInterval(endbossMovement)
     this.currentMotionImage = 0;
 
     let deathAnimation = setStoppableInterval(() => {

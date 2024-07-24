@@ -91,17 +91,17 @@ class AnimationObject extends MovableObject {
       this.currentMotionImage = 0;
       let interval, key, action;
 
-      if (type === 'bubble') {
+      if (type === "bubble") {
         interval = 50;
-        key = 'SPACE';
+        key = "SPACE";
         action = () => this.world.shootBubble();
-      } else if (type === 'poisonBubble') {
+      } else if (type === "poisonBubble") {
         interval = 50;
-        key = 'SPACE';
+        key = "SPACE";
         action = () => this.world.shootPoisonBubble();
-      } else if (type === 'finslap') {
+      } else if (type === "finslap") {
         interval = 150;
-        key = 'F';
+        key = "F";
         action = () => this.world.audios.finslap.play();
       }
 
@@ -127,23 +127,7 @@ class AnimationObject extends MovableObject {
    * @param {number} transitionInterval - Delay before transitioning to the puffed-up state.
    */
   animatePufferFish(directionInterval, transitionInterval) {
-    let movement, animation, direction, transition;
-
-    let clearAllIntervals = () => {
-      clearInterval(movement);
-      clearInterval(animation);
-      clearInterval(direction);
-      clearTimeout(transition);
-    };
-
-    let checkIfDeadInterval = setStoppableInterval(() => {
-      if (this.isPufferFishDead) {
-        clearAllIntervals();
-        clearInterval(checkIfDeadInterval);
-      }
-    }, 100);
-
-    movement = setStoppableInterval(() => {
+    let pufferFishMovement = setStoppableInterval(() => {
       if (this.movingLeft) {
         this.swimLeft();
         this.otherDirection = false;
@@ -153,21 +137,19 @@ class AnimationObject extends MovableObject {
       }
     }, 1000 / 60);
 
-    animation = setStoppableInterval(() => {
-      if (!this.isTransitioning && !this.isPuffedUp) {
+    let pufferFishAnimation = setStoppableInterval(() => {
+      if (this.isDead()) {
+        animatePufferFishDeath();
+        clearInterval(pufferFishMovement, pufferFishAnimation);
+        this.clearDirectionAndTransitionInterval();
+      } else if (!this.isTransitioning && !this.isPuffedUp) {
         this.offset.bottom = 18;
         this.playAnimation(this.MOTION_IMAGES);
       }
     }, 150);
 
-    direction = setStoppableInterval(() => {
-      this.movingLeft = !this.movingLeft;
-    }, directionInterval);
-
-    transition = setStoppableTimeout(() => {
-      this.isTransitioning = true;
-      this.animatePufferFishTransition();
-    }, transitionInterval);
+    this.startDirectionInterval(directionInterval);
+    this.startTransitionTimeout(transitionInterval);
   }
 
   /**
@@ -282,7 +264,7 @@ class AnimationObject extends MovableObject {
    * Animates the character or object by repeatedly playing the motion animation at specified intervals.
    * The animation is played every 100 milliseconds.
    */
-  animate() {
+  animatePoisonBottle() {
     setStoppableInterval(() => {
       this.playAnimation(this.MOTION_IMAGES);
     }, 100);

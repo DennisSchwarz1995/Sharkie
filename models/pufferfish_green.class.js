@@ -1,5 +1,5 @@
 class PufferFish_Green extends AnimationObject {
-   /**
+  /**
    * Creates an instance of `Pufferfish_Green`.
    * @param {number} position_x - The initial X position of the jellyfish.
    */
@@ -41,7 +41,7 @@ class PufferFish_Green extends AnimationObject {
   DEAD_IMAGES = [
     'img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/1.Dead 1 (can animate by going up).png',
     'img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/1.Dead 1 (can animate by going up).png',
-    'img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/1.Dead 1 (can animate by going up).png'
+    'img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/1.Dead 1 (can animate by going up).png',
   ];
 
   constructor(position_x) {
@@ -55,6 +55,40 @@ class PufferFish_Green extends AnimationObject {
     this.loadImagesForMotion(this.TRANSITION_IMAGES);
     this.loadImagesForMotion(this.PUFF_UP_IMAGES);
     this.loadImagesForMotion(this.DEAD_IMAGES);
-    this.animatePufferFish(this.directionInterval, this.transitionInterval)
+    this.animatePufferFish(this.directionInterval, this.transitionInterval);
+  }
+
+  /**
+   * Starts an interval to toggle the direction of the puffer fish.
+   * The direction is toggled based on the specified interval time.
+   *
+   * @param {number} directionInterval - The time (in milliseconds) between direction toggles.
+   */
+  startDirectionInterval(directionInterval) {
+    this.pufferFishDirection = setStoppableInterval(() => {
+      this.movingLeft = !this.movingLeft;
+    }, directionInterval);
+  }
+
+  /**
+   * Starts a timeout to trigger the transition of the puffer fish.
+   * After the specified timeout period, the puffer fish transition is activated.
+   *
+   * @param {number} transitionInterval - The time (in milliseconds) before triggering the transition.
+   */
+  startTransitionTimeout(transitionInterval) {
+    this.pufferFishTransition = setStoppableTimeout(() => {
+      this.isTransitioning = true;
+      this.animatePufferFishTransition();
+    }, transitionInterval);
+  }
+
+  /**
+   * Clears the direction and transition intervals.
+   * This stops any ongoing intervals and timeouts related to the puffer fish's direction and transition.
+   */
+  clearDirectionAndTransitionInterval() {
+    clearInterval(this.pufferFishDirection);
+    clearTimeout(this.pufferFishTransition);
   }
 }

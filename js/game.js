@@ -9,16 +9,16 @@ let intervalIds = [];
 let timeoutIds = [];
 let isInfoOpen = false;
 let isOverlayShown = false;
-let isStopButtonShown = false;
+let isOptionsShown = false;
+let isMuted = false;
 
 /**
  * Initializes the game canvas and world, and sets the initial audio volume.
-*/
+ */
 function init() {
-  canvas = document.getElementById("canvas");
+  canvas = document.getElementById('canvas');
   world = new World(canvas, keyboard, assets, audios);
-  let sliderValue = document.getElementById("slider").value;
-  setAudioVolume(sliderValue);
+  checkSoundVolume();
 }
 
 /**
@@ -37,7 +37,7 @@ function initListeners() {
  */
 function startGame() {
   toggleStartScreen();
-  showStopGameButton();
+  showOptions();
   generateLevel();
 }
 
@@ -49,7 +49,7 @@ function stopGame() {
   timeoutIds.forEach((id) => clearTimeout(id));
   world.audios.backgroundMusic.pause();
   world.audios.endbossBackgroundMusic.pause();
-  hideStopGameButton();
+  hideOptions();
   world.clearCanvas();
 }
 
@@ -57,9 +57,35 @@ function stopGame() {
  * Restarts the game by stopping it, toggling the start screen, and hiding any overlays.
  */
 function restartGame() {
+  hideOverlay();
+  toggleStartScreen();
+  stopGame();
+  startGame();
+  init();
+}
+
+/**
+ * Stops the game, toggles the visibility of the start screen, and hides any visible overlays.
+ */
+function goBackToStartScreen() {
   stopGame();
   toggleStartScreen();
   hideOverlay();
+}
+
+/**
+ * Checks the current sound volume state and adjusts the audio settings accordingly.
+ * If the game is muted, the audio will be set to mute and the mute icon will be updated.
+ * If the game is not muted, the audio volume will be set based on the current slider value.
+ */
+function checkSoundVolume() {
+  if (isMuted) {
+    audios.mute();
+    document.getElementById('muteIcon').src = 'img/6.Botones/unmute.png';
+  } else {
+    let sliderValue = document.getElementById('slider').value;
+    setAudioVolume(sliderValue);
+  }
 }
 
 /**
@@ -68,13 +94,13 @@ function restartGame() {
  */
 function showOverlay(condition) {
   let overlay;
-  if (condition === "win") {
-    overlay = document.getElementById("winOverlay");
-    overlay.classList.remove("d-none");
+  if (condition === 'win') {
+    overlay = document.getElementById('winOverlay');
+    overlay.classList.remove('d-none');
     isOverlayShown = true;
-  } else if (condition === "loose") {
-    overlay = document.getElementById("looseOverlay");
-    overlay.classList.remove("d-none");
+  } else if (condition === 'loose') {
+    overlay = document.getElementById('looseOverlay');
+    overlay.classList.remove('d-none');
     isOverlayShown = true;
   }
 }
@@ -84,8 +110,8 @@ function showOverlay(condition) {
  */
 function hideOverlay() {
   if (isOverlayShown) {
-    document.querySelectorAll(".overlay").forEach((overlay) => {
-      overlay.classList.add("d-none");
+    document.querySelectorAll('.overlay').forEach((overlay) => {
+      overlay.classList.add('d-none');
     });
     isOverlayShown = false;
   }
@@ -95,23 +121,23 @@ function hideOverlay() {
  * Toggles the visibility of the start screen.
  */
 function toggleStartScreen() {
-  document.getElementById("startScreen").classList.toggle("d-none");
+  document.getElementById('startScreen').classList.toggle('d-none');
 }
 
 /**
  * Shows the stop game button.
  */
-function showStopGameButton() {
-  document.getElementById("stopGameButton").classList.remove("d-none");
-  isStopButtonShown = true;
+function showOptions() {
+  document.getElementById('gameOptions').classList.remove('d-none');
+  isOptionsShown = true;
 }
 
 /**
  * Hides the stop game button.
  */
-function hideStopGameButton() {
-  document.getElementById("stopGameButton").classList.add("d-none");
-  isStopButtonShown = false;
+function hideOptions() {
+  document.getElementById('gameOptions').classList.add('d-none');
+  isOptionsShown = false;
 }
 
 /**
@@ -144,9 +170,9 @@ function setStoppableTimeout(fn, time) {
  * @param {Event} event - The click event.
  */
 function toggleSoundSlider(event) {
-  event.stopPropagation(); // Prevents the click event from propagating to the document
-  let slider = document.getElementById("volumeSlider");
-  slider.classList.toggle("invisible");
+  event.stopPropagation();
+  let slider = document.getElementById('volumeSlider');
+  slider.classList.toggle('invisible');
 }
 
 /**
@@ -156,26 +182,37 @@ function toggleSoundSlider(event) {
 function setAudioVolume(value) {
   let volume = value / 100;
   audios.setVolume(volume);
-  document.getElementById("sliderValue").innerText = value;
+  document.getElementById('sliderValue').innerText = value;
+}
+
+/**
+ * Sets the audio volume to 0 and toggles mute/unmute icon.
+ */
+function mute() {
+  audios.toggleMute();
+  isMuted = audios.isMuted;
+  document.getElementById('muteIcon').src = audios.isMuted
+    ? 'img/6.Botones/unmute.png'
+    : 'img/6.Botones/mute.png';
 }
 
 /**
  * Toggles fullscreen mode for the canvas and updates the fullscreen icon.
  */
 function toggleFullscreen() {
-  let canvas = document.getElementById("canvas");
-  let canvasContainer = document.getElementById("canvasContainer");
-  let icon = document.getElementById("resizeButton");
-  if (canvas.classList.contains("fullscreen")) {
-    canvas.classList.remove("fullscreen");
-    canvasContainer.classList.remove("fullscreen");
+  let canvas = document.getElementById('canvas');
+  let canvasContainer = document.getElementById('canvasContainer');
+  let icon = document.getElementById('resizeButton');
+  if (canvas.classList.contains('fullscreen')) {
+    canvas.classList.remove('fullscreen');
+    canvasContainer.classList.remove('fullscreen');
     fullscreen = false;
-    icon.src = "img/6.Botones/Full Screen/fullscreen-icon.png";
+    icon.src = 'img/6.Botones/Full Screen/fullscreen-icon.png';
   } else {
-    canvas.classList.add("fullscreen");
-    canvasContainer.classList.add("fullscreen");
+    canvas.classList.add('fullscreen');
+    canvasContainer.classList.add('fullscreen');
     fullscreen = true;
-    icon.src = "img/6.Botones/Full Screen/fullscreen-exit-icon.png";
+    icon.src = 'img/6.Botones/Full Screen/fullscreen-exit-icon.png';
   }
 }
 
@@ -184,14 +221,14 @@ function toggleFullscreen() {
  */
 function toggleInfo() {
   if (isInfoOpen) {
-    document.getElementById("info").classList.add("d-none");
-    document.getElementById("startScreen").classList.remove("d-none");
-    document.getElementById("canvas").classList.remove("border-radius-left-0");
+    document.getElementById('info').classList.add('d-none');
+    document.getElementById('startScreen').classList.remove('d-none');
+    document.getElementById('canvas').classList.remove('border-radius-left-0');
     isInfoOpen = false;
   } else {
-    document.getElementById("info").classList.remove("d-none");
-    document.getElementById("startScreen").classList.add("d-none");
-    document.getElementById("canvas").classList.add("border-radius-left-0");
+    document.getElementById('info').classList.remove('d-none');
+    document.getElementById('startScreen').classList.add('d-none');
+    document.getElementById('canvas').classList.add('border-radius-left-0');
     isInfoOpen = true;
   }
 }
@@ -201,11 +238,11 @@ function toggleInfo() {
  * The overlay is hidden if the device is in landscape orientation.
  */
 function checkDeviceDisplaySize() {
-  let overlay = document.getElementById("turnDeviceOverlay");
+  let overlay = document.getElementById('turnDeviceOverlay');
   if (window.innerHeight > window.innerWidth) {
-    overlay.classList.remove("d-none");
+    overlay.classList.remove('d-none');
   } else {
-    overlay.classList.add("d-none");
+    overlay.classList.add('d-none');
   }
 }
 
@@ -214,86 +251,87 @@ function checkDeviceDisplaySize() {
  * @param {Event} event - The click event.
  */
 function initializeClickListener() {
-  document.addEventListener("click", function (event) {
-    let slider = document.getElementById("volumeSlider");
-    let muteButton = document.getElementById("muteButton");
+  document.addEventListener('click', function (event) {
+    let slider = document.getElementById('volumeSlider');
+    let muteButton = document.getElementById('muteButton');
     if (
-      !slider.classList.contains("invisible") &&
+      !slider.classList.contains('invisible') &&
       !slider.contains(event.target) &&
       event.target !== muteButton
     ) {
-      slider.classList.add("invisible");
+      slider.classList.add('invisible');
     }
   });
 }
 
-// Add event listener to check device display size on window resize
-// Add event listener to check device display size on orientation change
+/**
+ * Add event listener to check device display size on window resize and on orientation change.
+ */
 function initializeWindowListener() {
-  window.addEventListener("resize", checkDeviceDisplaySize);
-  window.addEventListener("orientationchange", checkDeviceDisplaySize);
+  window.addEventListener('resize', checkDeviceDisplaySize);
+  window.addEventListener('orientationchange', checkDeviceDisplaySize);
 }
 
 /**
  * Initializes touch key event listeners for game controls.
  */
 function initializeTouchKeys() {
-  document.getElementById("up").addEventListener("touchstart", (e) => {
+  document.getElementById('up').addEventListener('touchstart', (e) => {
     e.preventDefault();
     keyboard.UP = true;
   });
 
-  document.getElementById("down").addEventListener("touchstart", (e) => {
+  document.getElementById('down').addEventListener('touchstart', (e) => {
     e.preventDefault();
     keyboard.DOWN = true;
   });
 
-  document.getElementById("left").addEventListener("touchstart", (e) => {
+  document.getElementById('left').addEventListener('touchstart', (e) => {
     e.preventDefault();
     keyboard.LEFT = true;
   });
 
-  document.getElementById("right").addEventListener("touchstart", (e) => {
+  document.getElementById('right').addEventListener('touchstart', (e) => {
     e.preventDefault();
     keyboard.RIGHT = true;
   });
 
-  document.getElementById("f").addEventListener("touchstart", (e) => {
+  document.getElementById('f').addEventListener('touchstart', (e) => {
     e.preventDefault();
     keyboard.F = true;
   });
 
-  document.getElementById("space").addEventListener("touchstart", (e) => {
+  document.getElementById('space').addEventListener('touchstart', (e) => {
     e.preventDefault();
     keyboard.SPACE = true;
   });
 
-  document.getElementById("up").addEventListener("touchend", (e) => {
+  document.getElementById('up').addEventListener('touchend', (e) => {
     e.preventDefault();
     keyboard.UP = false;
   });
 
-  document.getElementById("down").addEventListener("touchend", (e) => {
+  document.getElementById('down').addEventListener('touchend', (e) => {
     e.preventDefault();
     keyboard.DOWN = false;
   });
 
-  document.getElementById("left").addEventListener("touchend", (e) => {
+  document.getElementById('left').addEventListener('touchend', (e) => {
     e.preventDefault();
     keyboard.LEFT = false;
   });
 
-  document.getElementById("right").addEventListener("touchend", (e) => {
+  document.getElementById('right').addEventListener('touchend', (e) => {
     e.preventDefault();
     keyboard.RIGHT = false;
   });
 
-  document.getElementById("f").addEventListener("touchend", (e) => {
+  document.getElementById('f').addEventListener('touchend', (e) => {
     e.preventDefault();
     keyboard.F = false;
   });
 
-  document.getElementById("space").addEventListener("touchend", (e) => {
+  document.getElementById('space').addEventListener('touchend', (e) => {
     e.preventDefault();
     keyboard.SPACE = false;
   });
@@ -303,7 +341,7 @@ function initializeTouchKeys() {
  * Initializes keyboard button event listeners for game controls.
  */
 function initializeButtons() {
-  window.addEventListener("keydown", (event) => {
+  window.addEventListener('keydown', (event) => {
     if (event.keyCode == 40 || event.keyCode == 83) {
       keyboard.DOWN = true;
     }
@@ -333,7 +371,7 @@ function initializeButtons() {
     }
   });
 
-  window.addEventListener("keyup", (event) => {
+  window.addEventListener('keyup', (event) => {
     if (event.keyCode == 40 || event.keyCode == 83) {
       keyboard.DOWN = false;
     }
